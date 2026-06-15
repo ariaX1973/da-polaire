@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Diels-Alder polaire — profil PES &amp; descripteurs AroX endo/exo (M06-2X/6-31+G(d,p), SMD DCM)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg:#FAFAF7; --surface:#FFFFFF; --text:#1A1A1A; --muted:#6B6B6B; --border:#E2E0DA;
+  --accent:#534AB7;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#14141A; --surface:#1E1E26; --text:#ECEAE3; --muted:#9A9892; --border:#2E2E38; --accent:#AFA9EC; }
+}
+* { box-sizing:border-box; }
+html, body { margin:0; padding:0; background:var(--bg); color:var(--text); }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif; font-size:14px; line-height:1.5;
+       max-width:1280px; margin:0 auto; padding:1.5rem; }
+header h1 { font-size:1.4rem; font-weight:600; letter-spacing:-0.01em; margin:0 0 0.5rem; }
+.lede { color:var(--muted); font-size:0.95rem; margin:0 0 1.25rem; }
+.lede code { background:var(--border); padding:1px 4px; border-radius:3px; font-size:0.85em; }
+.lede a { color:var(--accent); }
+
+.toolbar { display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem;
+           padding:1rem; background:var(--surface); border:1px solid var(--border); border-radius:8px; }
+.row { display:flex; flex-wrap:wrap; align-items:center; gap:0.4rem; }
+.row .label { color:var(--muted); font-size:0.72rem; margin-right:0.5rem; min-width:80px;
+              text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
+.chip, .btn-desc, .btn-action {
+  border:1px solid var(--border); background:transparent; color:var(--text);
+  padding:3px 9px; border-radius:14px; cursor:pointer; font-size:0.82rem;
+  display:inline-flex; align-items:center; gap:5px; user-select:none; font-family:inherit;
+}
+.chip:hover, .btn-desc:hover, .btn-action:hover { background:var(--border); }
+.chip[aria-pressed="true"] { border-width:2px; padding:2px 8px; font-weight:500; }
+.btn-desc[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:500; }
+.btn-action { color:var(--muted); }
+.swatch { width:10px; height:10px; border-radius:50%; display:inline-block; flex-shrink:0; }
+.stroke-mini { width:18px; height:0; border-top:2px solid currentColor; display:inline-block; }
+
+.grid { display:grid; grid-template-columns:1.7fr 1fr; gap:1rem; }
+@media (max-width:1000px) { .grid { grid-template-columns:1fr; } }
+.card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:1rem; }
+.chart-card { display:flex; flex-direction:column; }
+.chart-wrapper { position:relative; height:440px; }
+.legend { margin-top:0.5rem; padding-top:0.5rem; border-top:1px solid var(--border);
+          display:flex; flex-wrap:wrap; gap:0.8rem 1.2rem; font-size:0.76rem; color:var(--muted); }
+.legend-section { display:flex; flex-direction:column; gap:3px; }
+.legend-section .heading { color:var(--text); font-weight:600; font-size:0.68rem;
+                            text-transform:uppercase; letter-spacing:0.05em; }
+.legend-item { display:inline-flex; align-items:center; gap:5px; margin-right:0.5rem; }
+
+.info-panel h2 { font-size:1rem; margin:0 0 0.5rem; }
+.info-panel .muted { color:var(--muted); font-size:0.85rem; }
+.info-panel .meta { font-size:0.83rem; margin:0.25rem 0 0.6rem; }
+.info-panel .struct { width:100%; max-width:340px; display:block; margin:0.4rem auto;
+                      background:#fff; border:1px solid var(--border); border-radius:6px; padding:6px; }
+.info-panel table { width:100%; border-collapse:collapse; font-size:0.76rem; margin-top:0.4rem;
+                    font-variant-numeric:tabular-nums; }
+.info-panel th, .info-panel td { padding:3px 5px; text-align:right; border-bottom:1px solid var(--border); }
+.info-panel th { color:var(--muted); font-weight:600; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.04em; }
+.info-panel th:first-child, .info-panel td:first-child { text-align:left; color:var(--muted); }
+.info-panel tr.highlight td { background:rgba(83,74,183,0.10); color:var(--text); font-weight:500; }
+.info-panel h3 { font-size:0.78rem; margin:0.65rem 0 0.2rem; color:var(--muted);
+                 text-transform:uppercase; letter-spacing:0.04em; font-weight:600; }
+.info-panel .tabs { display:flex; gap:4px; margin:0.4rem 0 0.2rem; flex-wrap:wrap; }
+.info-panel .tab-btn { font-size:0.74rem; padding:3px 9px; border:1px solid var(--border); background:transparent;
+                       color:var(--muted); border-radius:12px; cursor:pointer; font-family:inherit; }
+.info-panel .tab-btn[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:500; }
+
+footer { margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border); }
+.methods-note { font-size:0.78rem; color:var(--muted); margin:0; }
+.methods-note strong { color:var(--text); }
+.methods-note em { color:var(--text); font-style:italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Diels-Alder polaire — profil énergétique &amp; descripteurs d'aromaticité endo/exo</h1>
+  <p class="lede">
+    Réaction Diels-Alder polaire extraite de <em>Phys. Chem. Chem. Phys.</em> <strong>2026</strong>, 28, 4921-4934.
+    Niveau de théorie : <code>M06-2X/6-31+G(d,p)</code> avec solvatation <code>SMD (dichlorométhane)</code>.
+    Profil PES sur 5 points stationnaires — <strong>PC</strong> (pré-complexe, référence ΔE=0),
+    <strong>TS1</strong> → <strong>PA</strong> (intermédiaire post-addition) → <strong>TS2</strong> → <strong>CA</strong> (cycloadduit).
+    Descripteurs AroX (HOMA, EN, GEO, LDM, Q, S-hom) sur 6 motifs cycliques par point :
+    <strong>Ring A (en formation)</strong>, <strong>Ring B</strong>, <strong>Ring C</strong>,
+    <strong>Périph A+B (10)</strong>, <strong>Périph B+C (10)</strong>, <strong>Périph A+B+C (14)</strong>.
+    Cliquer un marqueur du PES pour voir la structure et tous les descripteurs des 6 motifs.
+  </p>
+</header>
+
+<section class="toolbar" aria-label="Contrôles">
+  <div class="row" id="stereo-row">
+    <span class="label">Stéréochimie</span>
+  </div>
+  <div class="row" id="motif-row">
+    <span class="label">Motifs cycle</span>
+  </div>
+  <div class="row" id="desc-row">
+    <span class="label">Descripteur</span>
+  </div>
+  <div class="row" id="homa-sub-row" hidden>
+    <span class="label">HOMA décomp.</span>
+  </div>
+  <div class="row" id="action-row">
+    <span class="label">Options</span>
+    <button class="chip" id="btn-clip" aria-pressed="false" title="Tronque l'axe descripteur à [-2, 1.5] pour éviter que les valeurs HOMA extrêmes (cycle manuel libre, jusqu'à -300) ne squashent l'affichage">Clip HOMA [−2, 1.5]</button>
+    <button class="btn-action" id="btn-default">Vue par défaut</button>
+    <button class="chip" id="btn-download" title="Télécharger le diagramme courant en PNG">⬇ Télécharger PNG</button>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="card chart-card">
+    <div class="chart-wrapper">
+      <canvas id="chart" aria-label="Profil énergétique Diels-Alder polaire endo et exo (5 points PC/TS1/PA/TS2/CA) avec descripteurs AroX par motif cyclique en superposition."></canvas>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <aside class="card info-panel" id="info-panel">
+    <h2>Sélectionne un point</h2>
+    <p class="muted">Clique sur un marqueur (PC / TS1 / PA / TS2 / CA) pour voir la structure et tous les descripteurs des 6 motifs cycliques.</p>
+  </aside>
+</section>
+
+<footer>
+  <p class="methods-note">
+    <strong>Methods.</strong> Réaction Diels-Alder polaire d'après <em>Phys. Chem. Chem. Phys.</em> 2026, 28, 4921-4934.
+    Optimisations DFT au niveau <strong>M06-2X/6-31+G(d,p)</strong> avec modèle de solvatation implicite <strong>SMD (dichlorométhane)</strong>, Gaussian 16.
+    Cinq points stationnaires par stéréochimie : <em>PC</em> (pré-complexe, référence ΔE = 0), <em>TS1</em> (première barrière), <em>PA</em> (intermédiaire post-addition), <em>TS2</em> (deuxième barrière), <em>CA</em> (cycloadduit final).
+    Énergies relatives à PC en kcal mol⁻¹. Axe x équi-réparti (pas de coordonnée IRC ici, profil discret).
+    Descripteurs <strong>AroX</strong> (HOMA Krygowski R<sub>opt</sub> = 1.3913 Å, famille LDM Pilmé–Spezia, indices Q et S-hom) sur 6 motifs cycliques par point :
+    <em>Ring A en formation</em> (cycle manuel imposé, atomes 1-6 ou indices équivalents post-réaction),
+    <em>Ring B</em> et <em>Ring C</em> (cycles aromatiques auto-détectés résiduels),
+    <em>Périph A+B</em>, <em>Périph B+C</em> (fusions périphériques de taille 10), <em>Périph A+B+C</em> (fusion totale de taille 14).
+    Les valeurs HOMA très négatives sur <em>Ring A</em> au PC et à TS1 (jusqu'à -314) sont normales : elles indiquent que les atomes du cycle imposé ne sont pas encore liés directement.
+    Utiliser <em>Clip HOMA</em> ou désactiver Ring A pour observer les autres cycles.
+    <strong>Endo</strong> : barrière PC→TS1 = 17.07, ΔE PC→CA = −11.10. <strong>Exo</strong> : barrière PC→TS1 = 17.31, ΔE PC→CA = −5.92 kcal mol⁻¹.
+  </p>
+</footer>
+
+<script>
+(() => {
+'use strict';
+
+// ============================================================
+// 1) PALETTE — convention du cahier des charges général v2.0
+// ============================================================
+const mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+const c = (o) => o[mode];
+
+const stereoColor = {
+  endo: { light:'#185FA5', dark:'#85B7EB' },   // bleu
+  exo:  { light:'#993C1D', dark:'#F0997B' },   // rouge brun
+};
+// Couleurs des 6 motifs : 3 rings + 3 periph (palette du cahier, adaptée)
+const motifColor = {
+  ringA:     { light:'#993556', dark:'#ED93B1' },  // rose vif — cycle clé (en formation)
+  ringB:     { light:'#534AB7', dark:'#AFA9EC' },  // violet
+  ringC:     { light:'#0F6E56', dark:'#5DCAA5' },  // vert sombre
+  periphAB:  { light:'#BA7517', dark:'#FAC775' },  // ambre
+  periphBC:  { light:'#7C5C2E', dark:'#C49A5E' },  // brun-ambre
+  periphABC: { light:'#444441', dark:'#B4B2A9' },  // gris
+};
+// Points stationnaires : minima en vert, TS en orange (étoile)
+const minColor = { fill:'#1D9E75', border:'#0F6E56' };
+const tsColor  = { fill:'#D85A30', border:'#993C1D' };
+
+// ============================================================
+// 2) DATA — généré par build_dapolaire_figure_data.py
+// ============================================================
+const DATA = {"endo":{"profile":[{"x":0,"y":0},{"x":1,"y":17.072},{"x":2,"y":7.601},{"x":3,"y":9.046},{"x":4,"y":-11.103}],"arox":{"PC":{"x":0,"y":0,"role":"pre-complex (reference, dE=0)","image":"figures/reactif.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,4,19,21,30,28]","HOMA":-246.487062,"EN":77.718952,"GEO":169.76811,"LDM_OffDiag":1.33921,"LDM_Diag":1.767498,"LDM_Frob":2.217551,"LDM_RMSD":0.369592,"LDM_CT":-19.759444,"Q_Frob":0.521618,"Q_RMSD":0.095234,"S_hom":0.168421},"ringB":{"motif_label":"ELEMENTAIRE (6) [28,30,35,36,39,34]","HOMA":0.883733,"EN":0.027636,"GEO":0.088631,"LDM_OffDiag":0.476837,"LDM_Diag":1.501405,"LDM_Frob":1.575306,"LDM_RMSD":0.262551,"LDM_CT":-11.813889,"Q_Frob":0.256738,"Q_RMSD":0.046874,"S_hom":0.387227},"ringC":{"motif_label":"ELEMENTAIRE (6) [35,36,38,45,42,37]","HOMA":0.884397,"EN":0.030579,"GEO":0.085024,"LDM_OffDiag":0.504212,"LDM_Diag":1.369871,"LDM_Frob":1.459718,"LDM_RMSD":0.243286,"LDM_CT":-10.443889,"Q_Frob":0.28723,"Q_RMSD":0.052441,"S_hom":0.393395},"periphAB":{"motif_label":"PERIPHERAL (10) [1,4,19,21,30,35,36,39,34,28]","HOMA":-147.550804,"EN":29.556201,"GEO":118.994603,"LDM_OffDiag":1.338806,"LDM_Diag":2.11903,"LDM_Frob":2.50653,"LDM_RMSD":0.250653,"LDM_CT":-13.935667,"Q_Frob":0.596318,"Q_RMSD":0.062857,"S_hom":0.13439},"periphBC":{"motif_label":"PERIPHERAL (10) [28,30,35,37,42,45,38,36,39,34]","HOMA":0.902487,"EN":0.012869,"GEO":0.084644,"LDM_OffDiag":0.684649,"LDM_Diag":1.834078,"LDM_Frob":1.9577,"LDM_RMSD":0.19577,"LDM_CT":-7.824667,"Q_Frob":0.437022,"Q_RMSD":0.046066,"S_hom":0.234867},"periphABC":{"motif_label":"PERIPHERAL (14) [1,4,19,21,30,35,37,42,45,38,36,3...]","HOMA":-105.12754,"EN":15.155776,"GEO":90.971765,"LDM_OffDiag":1.421251,"LDM_Diag":2.366414,"LDM_Frob":2.760411,"LDM_RMSD":0.197172,"LDM_CT":-10.470714,"Q_Frob":0.710291,"Q_RMSD":0.05265,"S_hom":0.11046},"_global":{"HOMA_TOTAL":-91.878099,"Q_G":0.038514,"S_hom_G":0.066017,"S_G":0.091497}}},"TS1":{"x":1,"y":17.072,"role":"transition state 1","image":"figures/endo-TS1.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.943933,"EN":0.020193,"GEO":0.035873,"LDM_OffDiag":0.483153,"LDM_Diag":1.350091,"LDM_Frob":1.43394,"LDM_RMSD":0.23899,"LDM_CT":-9.984722,"Q_Frob":0.270389,"Q_RMSD":0.049366,"S_hom":0.412314},"ringB":{"motif_label":"ELEMENTAIRE (6) [3,4,10,9,8,7]","HOMA":0.648235,"EN":0.16297,"GEO":0.188796,"LDM_OffDiag":0.526693,"LDM_Diag":1.539868,"LDM_Frob":1.627452,"LDM_RMSD":0.271242,"LDM_CT":-13.426667,"Q_Frob":0.285718,"Q_RMSD":0.052165,"S_hom":0.3502},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,14,13,12,11]","HOMA":-80.496051,"EN":23.828661,"GEO":57.667391,"LDM_OffDiag":1.072012,"LDM_Diag":1.902296,"LDM_Frob":2.183561,"LDM_RMSD":0.363927,"LDM_CT":-20.752778,"Q_Frob":0.431211,"Q_RMSD":0.078728,"S_hom":0.210805},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,3,7,8,9,10,4,5,6]","HOMA":0.789501,"EN":0.059914,"GEO":0.150585,"LDM_OffDiag":0.680014,"LDM_Diag":1.856756,"LDM_Frob":1.977362,"LDM_RMSD":0.197736,"LDM_CT":-8.6675,"Q_Frob":0.429326,"Q_RMSD":0.045255,"S_hom":0.221544},"periphBC":{"motif_label":"PERIPHERAL (10) [3,4,10,14,13,12,11,9,8,7]","HOMA":-48.078076,"EN":9.565689,"GEO":39.512387,"LDM_OffDiag":1.091016,"LDM_Diag":2.22426,"LDM_Frob":2.477428,"LDM_RMSD":0.247743,"LDM_CT":-14.818167,"Q_Frob":0.511362,"Q_RMSD":0.053902,"S_hom":0.152969},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,7,8,9,11,12,13,14,10,4,5,6]","HOMA":-34.055368,"EN":4.888525,"GEO":30.166843,"LDM_OffDiag":1.185939,"LDM_Diag":2.454319,"LDM_Frob":2.725827,"LDM_RMSD":0.194702,"LDM_CT":-10.975,"Q_Frob":0.623749,"Q_RMSD":0.046235,"S_hom":0.121764},"_global":{"HOMA_TOTAL":-29.693702,"Q_G":0.037911,"S_hom_G":0.067584,"S_G":0.093925}}},"PA":{"x":2,"y":7.601,"role":"post-addition intermediate","image":"figures/endo-PA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,4,19,21,30,28]","HOMA":-52.8666,"EN":14.269727,"GEO":39.596873,"LDM_OffDiag":0.9441,"LDM_Diag":2.005465,"LDM_Frob":2.216577,"LDM_RMSD":0.369429,"LDM_CT":-21.697778,"Q_Frob":0.372079,"Q_RMSD":0.067932,"S_hom":0.215695},"ringB":{"motif_label":"ELEMENTAIRE (6) [28,30,35,36,39,34]","HOMA":0.050504,"EN":0.473803,"GEO":0.475692,"LDM_OffDiag":0.61329,"LDM_Diag":1.565644,"LDM_Frob":1.681477,"LDM_RMSD":0.280246,"LDM_CT":-14.5175,"Q_Frob":0.356183,"Q_RMSD":0.06503,"S_hom":0.321571},"ringC":{"motif_label":"ELEMENTAIRE (6) [35,36,38,45,42,37]","HOMA":0.959015,"EN":0.018255,"GEO":0.02273,"LDM_OffDiag":0.47731,"LDM_Diag":1.333617,"LDM_Frob":1.41646,"LDM_RMSD":0.236077,"LDM_CT":-9.771667,"Q_Frob":0.265892,"Q_RMSD":0.048545,"S_hom":0.420765},"periphAB":{"motif_label":"PERIPHERAL (10) [1,4,19,21,30,35,36,39,34,28]","HOMA":-31.51589,"EN":5.78935,"GEO":26.726539,"LDM_OffDiag":0.993899,"LDM_Diag":2.298293,"LDM_Frob":2.503994,"LDM_RMSD":0.250399,"LDM_CT":-15.546833,"Q_Frob":0.484254,"Q_RMSD":0.051045,"S_hom":0.15318},"periphBC":{"motif_label":"PERIPHERAL (10) [28,30,35,37,42,45,38,36,39,34]","HOMA":0.439265,"EN":0.169867,"GEO":0.390868,"LDM_OffDiag":0.72841,"LDM_Diag":1.871376,"LDM_Frob":2.008141,"LDM_RMSD":0.200814,"LDM_CT":-9.246333,"Q_Frob":0.46875,"Q_RMSD":0.049411,"S_hom":0.210161},"periphABC":{"motif_label":"PERIPHERAL (14) [1,4,19,21,30,35,37,42,45,38,36,3...]","HOMA":-22.219234,"EN":2.95166,"GEO":20.267574,"LDM_OffDiag":1.095387,"LDM_Diag":2.516537,"LDM_Frob":2.7446,"LDM_RMSD":0.196043,"LDM_CT":-11.458333,"Q_Frob":0.594871,"Q_RMSD":0.044095,"S_hom":0.121791},"_global":{"HOMA_TOTAL":-19.444118,"Q_G":0.037719,"S_hom_G":0.069244,"S_G":0.09335}}},"TS2":{"x":3,"y":9.046,"role":"transition state 2","image":"figures/endo-TS2.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-22.689445,"EN":7.665878,"GEO":16.023567,"LDM_OffDiag":0.836315,"LDM_Diag":1.972838,"LDM_Frob":2.142782,"LDM_RMSD":0.35713,"LDM_CT":-20.960278,"Q_Frob":0.380497,"Q_RMSD":0.069469,"S_hom":0.246784},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":-0.057717,"EN":0.52599,"GEO":0.531727,"LDM_OffDiag":0.621875,"LDM_Diag":1.544505,"LDM_Frob":1.664999,"LDM_RMSD":0.2775,"LDM_CT":-14.528056,"Q_Frob":0.362435,"Q_RMSD":0.066171,"S_hom":0.318646},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.967446,"EN":0.014331,"GEO":0.018224,"LDM_OffDiag":0.476954,"LDM_Diag":1.341954,"LDM_Frob":1.424193,"LDM_RMSD":0.237365,"LDM_CT":-9.771389,"Q_Frob":0.266756,"Q_RMSD":0.048703,"S_hom":0.422946},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-13.399814,"EN":3.228837,"GEO":11.170977,"LDM_OffDiag":0.904376,"LDM_Diag":2.272032,"LDM_Frob":2.445409,"LDM_RMSD":0.244541,"LDM_CT":-15.139167,"Q_Frob":0.490962,"Q_RMSD":0.051752,"S_hom":0.165473},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.373647,"EN":0.186969,"GEO":0.439384,"LDM_OffDiag":0.734001,"LDM_Diag":1.857491,"LDM_Frob":1.997256,"LDM_RMSD":0.199726,"LDM_CT":-9.259667,"Q_Frob":0.47325,"Q_RMSD":0.049885,"S_hom":0.208898},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-9.279669,"EN":1.642324,"GEO":8.637346,"LDM_OffDiag":1.017796,"LDM_Diag":2.495378,"LDM_Frob":2.694962,"LDM_RMSD":0.192497,"LDM_CT":-11.156667,"Q_Frob":0.599609,"Q_RMSD":0.044446,"S_hom":0.12918},"_global":{"HOMA_TOTAL":-8.143552,"Q_G":0.03778,"S_hom_G":0.068377,"S_G":0.094161}}},"CA":{"x":4,"y":-11.103,"role":"cycloadduct (product)","image":"figures/endo-CA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":-1.425336,"EN":1.626127,"GEO":0.799209,"LDM_OffDiag":0.655974,"LDM_Diag":1.903214,"LDM_Frob":2.013089,"LDM_RMSD":0.335515,"LDM_CT":-19.019722,"Q_Frob":0.370319,"Q_RMSD":0.067611,"S_hom":0.28827},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,6,7,8,9,10]","HOMA":-0.567253,"EN":0.793005,"GEO":0.774248,"LDM_OffDiag":0.65246,"LDM_Diag":1.526783,"LDM_Frob":1.660353,"LDM_RMSD":0.276725,"LDM_CT":-14.948056,"Q_Frob":0.385878,"Q_RMSD":0.070451,"S_hom":0.308196},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.992302,"EN":0.003609,"GEO":0.004089,"LDM_OffDiag":0.485161,"LDM_Diag":1.357484,"LDM_Frob":1.441577,"LDM_RMSD":0.240263,"LDM_CT":-9.5525,"Q_Frob":0.278794,"Q_RMSD":0.050901,"S_hom":0.429507},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,3,4,5,6,7,8,9,10]","HOMA":-0.731237,"EN":0.874073,"GEO":0.857164,"LDM_OffDiag":0.774511,"LDM_Diag":2.219731,"LDM_Frob":2.350972,"LDM_RMSD":0.235097,"LDM_CT":-14.307,"Q_Frob":0.495441,"Q_RMSD":0.052224,"S_hom":0.17807},"periphBC":{"motif_label":"PERIPHERAL (10) [1,6,7,8,9,14,13,12,11,10]","HOMA":0.062154,"EN":0.283664,"GEO":0.654181,"LDM_OffDiag":0.762435,"LDM_Diag":1.847477,"LDM_Frob":1.998619,"LDM_RMSD":0.199862,"LDM_CT":-9.404667,"Q_Frob":0.494161,"Q_RMSD":0.052089,"S_hom":0.204994},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,4,5,6,7,8,9,14,13,12,11,10]","HOMA":-0.234808,"EN":0.444332,"GEO":0.790476,"LDM_OffDiag":0.920623,"LDM_Diag":2.451389,"LDM_Frob":2.61856,"LDM_RMSD":0.18704,"LDM_CT":-10.502262,"Q_Frob":0.61123,"Q_RMSD":0.045307,"S_hom":0.136451},"_global":{"HOMA_TOTAL":-0.290282,"Q_G":0.038202,"S_hom_G":0.066643,"S_G":0.093056}}}},"barrier1_kcal":17.072,"barrier2_kcal":1.4449999999999994,"delta_E_kcal":-11.103},"exo":{"profile":[{"x":0,"y":0},{"x":1,"y":17.313},{"x":2,"y":8.321},{"x":3,"y":12.265},{"x":4,"y":-5.919}],"arox":{"PC":{"x":0,"y":0,"role":"pre-complex (reference, dE=0)","image":"figures/reactif.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.884114,"EN":0.030009,"GEO":0.085877,"LDM_OffDiag":0.505294,"LDM_Diag":1.368014,"LDM_Frob":1.458349,"LDM_RMSD":0.243058,"LDM_CT":-10.380278,"Q_Frob":0.288622,"Q_RMSD":0.052695,"S_hom":0.394627},"ringB":{"motif_label":"ELEMENTAIRE (6) [2,3,7,8,9,10]","HOMA":0.879537,"EN":0.02922,"GEO":0.091243,"LDM_OffDiag":0.481724,"LDM_Diag":1.48677,"LDM_Frob":1.562863,"LDM_RMSD":0.260477,"LDM_CT":-11.619722,"Q_Frob":0.262026,"Q_RMSD":0.047839,"S_hom":0.388213},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,17,16,15,14]","HOMA":-314.18523,"EN":102.909697,"GEO":212.275533,"LDM_OffDiag":1.345766,"LDM_Diag":1.774502,"LDM_Frob":2.227093,"LDM_RMSD":0.371182,"LDM_CT":-19.893611,"Q_Frob":0.500234,"Q_RMSD":0.09133,"S_hom":0.165606},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,10,9,8,7,3,4,5,6]","HOMA":0.901736,"EN":0.01281,"GEO":0.085455,"LDM_OffDiag":0.691216,"LDM_Diag":1.822803,"LDM_Frob":1.949459,"LDM_RMSD":0.194946,"LDM_CT":-7.673833,"Q_Frob":0.442697,"Q_RMSD":0.046664,"S_hom":0.23578},"periphBC":{"motif_label":"PERIPHERAL (10) [2,3,7,8,9,14,15,16,17,10]","HOMA":-188.172097,"EN":38.897742,"GEO":150.274355,"LDM_OffDiag":1.348383,"LDM_Diag":2.114013,"LDM_Frob":2.507426,"LDM_RMSD":0.250743,"LDM_CT":-13.9755,"Q_Frob":0.581096,"Q_RMSD":0.061253,"S_hom":0.132019},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,10,17,16,15,14,9,8,7,3,4,5,6]","HOMA":-134.141489,"EN":19.913412,"GEO":115.228076,"LDM_OffDiag":1.429579,"LDM_Diag":2.362452,"LDM_Frob":2.761317,"LDM_RMSD":0.197237,"LDM_CT":-10.419881,"Q_Frob":0.700313,"Q_RMSD":0.051911,"S_hom":0.110094},"_global":{"HOMA_TOTAL":-117.265947,"Q_G":0.038534,"S_hom_G":0.066105,"S_G":0.091358}}},"TS1":{"x":1,"y":17.313,"role":"transition state 1","image":"figures/exo-TS1.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.941169,"EN":0.021518,"GEO":0.037313,"LDM_OffDiag":0.485422,"LDM_Diag":1.334936,"LDM_Frob":1.420453,"LDM_RMSD":0.236742,"LDM_CT":-9.834722,"Q_Frob":0.27277,"Q_RMSD":0.049801,"S_hom":0.413314},"ringB":{"motif_label":"ELEMENTAIRE (6) [2,3,7,8,9,10]","HOMA":0.62586,"EN":0.174727,"GEO":0.199413,"LDM_OffDiag":0.533269,"LDM_Diag":1.523834,"LDM_Frob":1.614449,"LDM_RMSD":0.269075,"LDM_CT":-13.297778,"Q_Frob":0.293008,"Q_RMSD":0.053496,"S_hom":0.349521},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,17,16,15,14]","HOMA":-75.523568,"EN":22.402558,"GEO":54.12101,"LDM_OffDiag":1.056656,"LDM_Diag":1.909389,"LDM_Frob":2.182266,"LDM_RMSD":0.363711,"LDM_CT":-20.848889,"Q_Frob":0.426289,"Q_RMSD":0.077829,"S_hom":0.211083},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,10,9,8,7,3,4,5,6]","HOMA":0.77752,"EN":0.063726,"GEO":0.158753,"LDM_OffDiag":0.687922,"LDM_Diag":1.838533,"LDM_Frob":1.963018,"LDM_RMSD":0.196302,"LDM_CT":-8.523667,"Q_Frob":0.436502,"Q_RMSD":0.046011,"S_hom":0.221643},"periphBC":{"motif_label":"PERIPHERAL (10) [2,3,7,8,9,14,15,16,17,10]","HOMA":-45.104641,"EN":9.049505,"GEO":37.055135,"LDM_OffDiag":1.079705,"LDM_Diag":2.218609,"LDM_Frob":2.467385,"LDM_RMSD":0.246739,"LDM_CT":-14.8095,"Q_Frob":0.509046,"Q_RMSD":0.053658,"S_hom":0.15238},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,10,17,16,15,14,9,8,7,3,4,5,6]","HOMA":-31.930454,"EN":4.622126,"GEO":28.308328,"LDM_OffDiag":1.17708,"LDM_Diag":2.445477,"LDM_Frob":2.714015,"LDM_RMSD":0.193858,"LDM_CT":-10.9275,"Q_Frob":0.623523,"Q_RMSD":0.046219,"S_hom":0.121745},"_global":{"HOMA_TOTAL":-27.836425,"Q_G":0.037939,"S_hom_G":0.067445,"S_G":0.093829}}},"PA":{"x":2,"y":8.321,"role":"post-addition intermediate","image":"figures/exo-PA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-68.863782,"EN":17.616233,"GEO":52.247549,"LDM_OffDiag":0.965466,"LDM_Diag":2.034953,"LDM_Frob":2.252367,"LDM_RMSD":0.375395,"LDM_CT":-22.076944,"Q_Frob":0.36903,"Q_RMSD":0.067375,"S_hom":0.208155},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":0.052115,"EN":0.473352,"GEO":0.474532,"LDM_OffDiag":0.61972,"LDM_Diag":1.568458,"LDM_Frob":1.68645,"LDM_RMSD":0.281075,"LDM_CT":-14.473611,"Q_Frob":0.362479,"Q_RMSD":0.066179,"S_hom":0.320861},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.962307,"EN":0.016668,"GEO":0.021025,"LDM_OffDiag":0.482464,"LDM_Diag":1.320752,"LDM_Frob":1.406115,"LDM_RMSD":0.234352,"LDM_CT":-9.575,"Q_Frob":0.271439,"Q_RMSD":0.049558,"S_hom":0.422596},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-41.118944,"EN":7.074492,"GEO":35.044453,"LDM_OffDiag":1.017141,"LDM_Diag":2.316379,"LDM_Frob":2.52986,"LDM_RMSD":0.252986,"LDM_CT":-15.748833,"Q_Frob":0.485635,"Q_RMSD":0.05119,"S_hom":0.148922},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.440406,"EN":0.168573,"GEO":0.391021,"LDM_OffDiag":0.739385,"LDM_Diag":1.868786,"LDM_Frob":2.009739,"LDM_RMSD":0.200974,"LDM_CT":-9.132167,"Q_Frob":0.477855,"Q_RMSD":0.05037,"S_hom":0.210152},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-29.078434,"EN":3.603391,"GEO":26.475043,"LDM_OffDiag":1.1194,"LDM_Diag":2.529409,"LDM_Frob":2.766038,"LDM_RMSD":0.197574,"LDM_CT":-11.547976,"Q_Frob":0.600621,"Q_RMSD":0.044521,"S_hom":0.11964},"_global":{"HOMA_TOTAL":-25.44357,"Q_G":0.037707,"S_hom_G":0.068941,"S_G":0.093129}}},"TS2":{"x":3,"y":12.265,"role":"transition state 2","image":"figures/exo-TS2.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-18.453985,"EN":6.691914,"GEO":12.762071,"LDM_OffDiag":0.806118,"LDM_Diag":1.981876,"LDM_Frob":2.139547,"LDM_RMSD":0.356591,"LDM_CT":-20.929444,"Q_Frob":0.375457,"Q_RMSD":0.068549,"S_hom":0.253141},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":-0.09183,"EN":0.540506,"GEO":0.551324,"LDM_OffDiag":0.629824,"LDM_Diag":1.53668,"LDM_Frob":1.660741,"LDM_RMSD":0.27679,"LDM_CT":-14.436667,"Q_Frob":0.369919,"Q_RMSD":0.067538,"S_hom":0.317923},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.972779,"EN":0.012002,"GEO":0.01522,"LDM_OffDiag":0.481021,"LDM_Diag":1.342409,"LDM_Frob":1.425988,"LDM_RMSD":0.237665,"LDM_CT":-9.656667,"Q_Frob":0.271721,"Q_RMSD":0.049609,"S_hom":0.425499},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-10.862368,"EN":2.850154,"GEO":9.012214,"LDM_OffDiag":0.885691,"LDM_Diag":2.274976,"LDM_Frob":2.441304,"LDM_RMSD":0.24413,"LDM_CT":-15.112,"Q_Frob":0.490843,"Q_RMSD":0.051739,"S_hom":0.16683},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.351086,"EN":0.19337,"GEO":0.455543,"LDM_OffDiag":0.744983,"LDM_Diag":1.852484,"LDM_Frob":1.996672,"LDM_RMSD":0.199667,"LDM_CT":-9.166,"Q_Frob":0.482451,"Q_RMSD":0.050855,"S_hom":0.208764},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-7.468703,"EN":1.451791,"GEO":7.016911,"LDM_OffDiag":1.004384,"LDM_Diag":2.499166,"LDM_Frob":2.693439,"LDM_RMSD":0.192389,"LDM_CT":-11.112143,"Q_Frob":0.60278,"Q_RMSD":0.044681,"S_hom":0.130223},"_global":{"HOMA_TOTAL":-6.562502,"Q_G":0.037816,"S_hom_G":0.067969,"S_G":0.094105}}},"CA":{"x":4,"y":-5.919,"role":"cycloadduct (product)","image":"figures/exo-CA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":-1.844188,"EN":1.876611,"GEO":0.967577,"LDM_OffDiag":0.665711,"LDM_Diag":1.890483,"LDM_Frob":2.004269,"LDM_RMSD":0.334045,"LDM_CT":-18.877778,"Q_Frob":0.382608,"Q_RMSD":0.069854,"S_hom":0.288665},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,6,7,8,9,10]","HOMA":-0.51276,"EN":0.744364,"GEO":0.768396,"LDM_OffDiag":0.652594,"LDM_Diag":1.502317,"LDM_Frob":1.637937,"LDM_RMSD":0.272989,"LDM_CT":-14.542778,"Q_Frob":0.386692,"Q_RMSD":0.0706,"S_hom":0.3115},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,14,13,12,11]","HOMA":0.991532,"EN":0.004381,"GEO":0.004087,"LDM_OffDiag":0.483949,"LDM_Diag":1.350196,"LDM_Frob":1.434307,"LDM_RMSD":0.239051,"LDM_CT":-9.531944,"Q_Frob":0.277324,"Q_RMSD":0.050632,"S_hom":0.42953},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,3,4,5,6,7,8,9,10]","HOMA":-0.921366,"EN":0.935783,"GEO":0.985583,"LDM_OffDiag":0.789024,"LDM_Diag":2.19648,"LDM_Frob":2.333899,"LDM_RMSD":0.23339,"LDM_CT":-13.971,"Q_Frob":0.508381,"Q_RMSD":0.053588,"S_hom":0.180063},"periphBC":{"motif_label":"PERIPHERAL (10) [1,6,7,8,9,11,12,13,14,10]","HOMA":0.09325,"EN":0.27329,"GEO":0.633461,"LDM_OffDiag":0.762573,"LDM_Diag":1.828475,"LDM_Frob":1.981121,"LDM_RMSD":0.198112,"LDM_CT":-9.2065,"Q_Frob":0.495123,"Q_RMSD":0.052191,"S_hom":0.206101},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,4,5,6,7,8,9,11,12,13,14,10]","HOMA":-0.371757,"EN":0.4825,"GEO":0.889258,"LDM_OffDiag":0.931108,"LDM_Diag":2.431232,"LDM_Frob":2.603431,"LDM_RMSD":0.185959,"LDM_CT":-10.285833,"Q_Frob":0.620784,"Q_RMSD":0.046016,"S_hom":0.137534},"_global":{"HOMA_TOTAL":-0.418659,"Q_G":0.038193,"S_hom_G":0.066694,"S_G":0.093018}}}},"barrier1_kcal":17.313,"barrier2_kcal":3.943999999999999,"delta_E_kcal":-5.919}};
+
+const STEREOS = ['endo', 'exo'];
+const MOTIFS  = ['ringA', 'ringB', 'ringC', 'periphAB', 'periphBC', 'periphABC'];
+const MOTIF_LABEL = {
+  ringA:     'Ring A (en formation)',
+  ringB:     'Ring B',
+  ringC:     'Ring C',
+  periphAB:  'Périph A+B (10)',
+  periphBC:  'Périph B+C (10)',
+  periphABC: 'Périph A+B+C (14)',
+};
+const STEREO_LABEL = { endo: 'Endo', exo: 'Exo' };
+const STATE_ORDER  = ['PC', 'TS1', 'PA', 'TS2', 'CA'];
+const STATE_LABEL  = { PC: 'PC', TS1: 'TS1', PA: 'PA', TS2: 'TS2', CA: 'CA' };
+const STATE_ROLE   = { PC:'pré-complexe (réf)', TS1:'transition state 1', PA:'intermédiaire', TS2:'transition state 2', CA:'cycloadduit' };
+
+const DESCRIPTORS = [
+  { key:'HOMA',        label:'HOMA',          family:'HOMA',  perMotif:true,  hasDecomp:true },
+  { key:'LDM_OffDiag', label:'LDM Off Diag.', family:'LDM',   perMotif:true },
+  { key:'LDM_Diag',    label:'LDM Diag.',     family:'LDM',   perMotif:true },
+  { key:'LDM_Frob',    label:'LDM Frob Full', family:'LDM',   perMotif:true },
+  { key:'LDM_RMSD',    label:'LDM RMSD',      family:'LDM',   perMotif:true },
+  { key:'LDM_CT',      label:'LDM CT %',      family:'LDM',   perMotif:true },
+  { key:'Q_Frob',      label:'Q Frob',        family:'Q',     perMotif:true },
+  { key:'Q_RMSD',      label:'Q RMSD',        family:'Q',     perMotif:true },
+  { key:'S_hom',       label:'S-hom',         family:'S',     perMotif:true },
+  { key:'HOMA_TOTAL',  label:'HOMA total',    family:'global', perMotif:false },
+  { key:'Q_G',         label:'Q(G)',          family:'global', perMotif:false },
+  { key:'S_hom_G',     label:'S-hom(G)',      family:'global', perMotif:false },
+  { key:'S_G',         label:'S(G)',          family:'global', perMotif:false },
+];
+const DESC_BY_KEY = Object.fromEntries(DESCRIPTORS.map(d => [d.key, d]));
+
+const HOMA_DECOMP = ['HOMA', 'EN', 'GEO'];
+
+// ============================================================
+// 3) STATE
+// ============================================================
+const state = {
+  stereos: new Set(['endo', 'exo']),
+  motifs:  new Set(MOTIFS),
+  descriptor: null,
+  homaSubs: new Set(['HOMA']),
+  clipHoma: false,
+  selected: null,
+};
+
+// ============================================================
+// 4) HELPERS
+// ============================================================
+function fmt(v, digits=3) {
+  if (v == null || isNaN(v)) return '—';
+  return (+v).toFixed(digits);
+}
+function fmtAuto(v) {
+  if (v == null || isNaN(v)) return '—';
+  const a = Math.abs(v);
+  if (a < 1e-3 && a !== 0) return v.toExponential(2);
+  if (a >= 1000) return v.toFixed(1);
+  return v.toFixed(3);
+}
+function compStyle(comp) {
+  // HOMA = solid, EN = dashed, GEO = dotted
+  return comp === 'HOMA' ? [] : comp === 'EN' ? [6,4] : [2,3];
+}
+function clipIfHoma(v) {
+  if (!state.clipHoma) return v;
+  if (v == null) return null;
+  if (v < -2) return -2;
+  if (v > 1.5) return 1.5;
+  return v;
+}
+
+// ============================================================
+// 5) RENDER
+// ============================================================
+let chart;
+
+function buildDatasets() {
+  const ds = [];
+
+  // PES profiles (line + markers)
+  for (const stereo of STEREOS) {
+    if (!state.stereos.has(stereo)) continue;
+    const points = DATA[stereo].profile.map(p => ({ x: p.x, y: p.y }));
+    ds.push({
+      type:'line',
+      label: `PES ${STEREO_LABEL[stereo]}`,
+      data: points,
+      yAxisID:'y',
+      borderColor: c(stereoColor[stereo]),
+      backgroundColor: c(stereoColor[stereo]),
+      borderWidth: 2,
+      tension: 0.3,
+      pointRadius: 0,
+      fill: false,
+      meta_kind:'pes',
+      meta_stereo: stereo,
+    });
+    // Markers : cercles pour minima (PC, PA, CA), étoile pour TS1/TS2
+    const minPts = [], tsPts = [];
+    for (const st of STATE_ORDER) {
+      const p = DATA[stereo].arox[st];
+      const pt = { x: p.x, y: p.y, state: st, stereo: stereo };
+      if (st === 'TS1' || st === 'TS2') tsPts.push(pt);
+      else minPts.push(pt);
+    }
+    ds.push({
+      type:'line', label:`minima ${stereo}`, data: minPts, yAxisID:'y',
+      borderColor:'transparent', backgroundColor: minColor.fill,
+      pointBackgroundColor: minColor.fill, pointBorderColor: minColor.border,
+      pointRadius: 7, pointHoverRadius: 9, pointBorderWidth: 1.5,
+      pointStyle:'circle', showLine:false,
+      meta_kind:'marker_min', meta_stereo: stereo,
+    });
+    ds.push({
+      type:'line', label:`ts ${stereo}`, data: tsPts, yAxisID:'y',
+      borderColor:'transparent', backgroundColor: tsColor.fill,
+      pointBackgroundColor: tsColor.fill, pointBorderColor: tsColor.border,
+      pointRadius: 10, pointHoverRadius: 12, pointBorderWidth: 1.5,
+      pointStyle:'star', showLine:false,
+      meta_kind:'marker_ts', meta_stereo: stereo,
+    });
+  }
+
+  // Descriptor curves (right Y axis)
+  const dkey = state.descriptor;
+  if (dkey) {
+    const desc = DESC_BY_KEY[dkey];
+    if (desc.perMotif) {
+      const isHoma = dkey === 'HOMA';
+      const comps = isHoma ? Array.from(state.homaSubs) : ['HOMA']; // HOMA-only multi-component
+      for (const stereo of STEREOS) {
+        if (!state.stereos.has(stereo)) continue;
+        const pointStyle = stereo === 'endo' ? 'circle' : 'triangle';
+        for (const motif of MOTIFS) {
+          if (!state.motifs.has(motif)) continue;
+          for (const comp of comps) {
+            const lookupKey = isHoma ? comp : dkey;
+            const points = STATE_ORDER.map(st => {
+              const v = DATA[stereo].arox[st].desc[motif][lookupKey];
+              return { x: DATA[stereo].arox[st].x, y: clipIfHoma(v), rawY: v };
+            });
+            ds.push({
+              type:'line',
+              label: `${MOTIF_LABEL[motif]} · ${STEREO_LABEL[stereo]}${isHoma ? ' · ' + comp : ''}`,
+              data: points,
+              yAxisID:'y1',
+              borderColor: c(motifColor[motif]),
+              backgroundColor: c(motifColor[motif]),
+              borderWidth: 1.7,
+              borderDash: isHoma ? compStyle(comp) : [],
+              tension: 0.2,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              pointStyle: pointStyle,
+              fill: false,
+              meta_kind:'desc', meta_stereo: stereo, meta_motif: motif, meta_comp: comp,
+            });
+          }
+        }
+      }
+    } else {
+      // Descripteur global (1 valeur par état)
+      for (const stereo of STEREOS) {
+        if (!state.stereos.has(stereo)) continue;
+        const pointStyle = stereo === 'endo' ? 'circle' : 'triangle';
+        const points = STATE_ORDER.map(st => {
+          const v = DATA[stereo].arox[st].desc._global[dkey];
+          return { x: DATA[stereo].arox[st].x, y: clipIfHoma(v), rawY: v };
+        });
+        ds.push({
+          type:'line',
+          label: `${desc.label} · ${STEREO_LABEL[stereo]}`,
+          data: points,
+          yAxisID:'y1',
+          borderColor: c(stereoColor[stereo]),
+          backgroundColor: c(stereoColor[stereo]),
+          borderWidth: 2,
+          tension: 0.2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          pointStyle: pointStyle,
+          fill: false,
+          meta_kind:'desc_global', meta_stereo: stereo,
+        });
+      }
+    }
+  }
+
+  return ds;
+}
+
+function chartOptions() {
+  const showY1 = !!state.descriptor;
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 200 },
+    interaction: { mode: 'nearest', intersect: true },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: (items) => {
+            const d = items[0];
+            const pt = d.raw;
+            if (pt && pt.state) return `${pt.state} · ${STEREO_LABEL[pt.stereo]} (${STATE_ROLE[pt.state]})`;
+            return STATE_LABEL[STATE_ORDER[Math.round(d.parsed.x)]] || '';
+          },
+          label: (item) => {
+            const ds = item.dataset;
+            const v = item.parsed.y;
+            const raw = (item.raw && item.raw.rawY != null) ? item.raw.rawY : v;
+            if (ds.meta_kind === 'pes')          return `PES ${STEREO_LABEL[ds.meta_stereo]} : ΔE = ${fmt(v, 3)} kcal/mol`;
+            if (ds.meta_kind === 'marker_min')   return `minimum : ΔE = ${fmt(v, 3)} kcal/mol`;
+            if (ds.meta_kind === 'marker_ts')   return `transition state : ΔE = ${fmt(v, 3)} kcal/mol`;
+            if (ds.meta_kind === 'desc') {
+              const clipped = state.clipHoma && Math.abs(raw - v) > 1e-6;
+              const tag = clipped ? ' (clipped)' : '';
+              return `${MOTIF_LABEL[ds.meta_motif]} · ${ds.meta_comp || state.descriptor} = ${fmtAuto(raw)}${tag}`;
+            }
+            if (ds.meta_kind === 'desc_global') return `${DESC_BY_KEY[state.descriptor].label} = ${fmtAuto(raw)}`;
+            return `${ds.label} : ${fmtAuto(v)}`;
+          }
+        }
+      },
+    },
+    scales: {
+      x: {
+        type:'linear',
+        min: -0.4, max: 4.4,
+        ticks: {
+          stepSize: 1,
+          callback: (v) => STATE_LABEL[STATE_ORDER[v]] || '',
+          color: c({light:'#333',dark:'#ccc'}),
+        },
+        grid: { display:false },
+        title: { display:true, text:'Coordonnée réactionnelle (points stationnaires)', color: c({light:'#444',dark:'#bbb'}) },
+      },
+      y: {
+        title: { display:true, text:'ΔE (kcal mol⁻¹, réf PC=0)', color: c({light:'#444',dark:'#bbb'}) },
+        suggestedMin: -15, suggestedMax: 22,
+        grid: { color: c({light:'rgba(0,0,0,0.05)', dark:'rgba(255,255,255,0.06)'}) },
+        ticks: { color: c({light:'#333',dark:'#ccc'}) },
+      },
+      y1: {
+        display: showY1,
+        position: 'right',
+        title: { display: showY1, text: showY1 ? (state.descriptor === 'HOMA' ? 'HOMA / EN / GEO' : DESC_BY_KEY[state.descriptor].label) : '', color: c({light:'#444',dark:'#bbb'}) },
+        grid: { drawOnChartArea: false },
+        ticks: { color: c({light:'#333',dark:'#ccc'}) },
+      },
+    },
+    onClick: (e, els) => {
+      if (!els.length) return;
+      for (const el of els) {
+        const ds = chart.data.datasets[el.datasetIndex];
+        if (ds.meta_kind === 'marker_min' || ds.meta_kind === 'marker_ts') {
+          const pt = ds.data[el.index];
+          state.selected = { state: pt.state, stereo: pt.stereo };
+          renderInfoPanel();
+          return;
+        }
+      }
+    },
+  };
+}
+
+function render() {
+  chart.data.datasets = buildDatasets();
+  chart.options = chartOptions();
+  chart.update();
+  renderLegend();
+}
+
+// ============================================================
+// 6) UI : toolbar
+// ============================================================
+function makeChip(text, pressed, onClick, extraSwatch) {
+  const b = document.createElement('button');
+  b.className = 'chip';
+  b.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+  if (extraSwatch) {
+    const sw = document.createElement('span');
+    sw.className = 'swatch';
+    sw.style.background = extraSwatch;
+    b.appendChild(sw);
+  }
+  b.appendChild(document.createTextNode(text));
+  b.onclick = onClick;
+  return b;
+}
+
+function renderToolbar() {
+  // Stereos
+  const sRow = document.getElementById('stereo-row');
+  sRow.querySelectorAll('.chip').forEach(n => n.remove());
+  for (const s of STEREOS) {
+    const chip = makeChip(STEREO_LABEL[s], state.stereos.has(s), () => {
+      if (state.stereos.has(s)) {
+        if (state.stereos.size > 1) state.stereos.delete(s);
+      } else state.stereos.add(s);
+      renderToolbar(); render();
+    }, c(stereoColor[s]));
+    sRow.appendChild(chip);
+  }
+
+  // Motifs
+  const mRow = document.getElementById('motif-row');
+  mRow.querySelectorAll('.chip').forEach(n => n.remove());
+  for (const m of MOTIFS) {
+    const chip = makeChip(MOTIF_LABEL[m], state.motifs.has(m), () => {
+      if (state.motifs.has(m)) state.motifs.delete(m); else state.motifs.add(m);
+      renderToolbar(); render();
+    }, c(motifColor[m]));
+    mRow.appendChild(chip);
+  }
+
+  // Descriptors
+  const dRow = document.getElementById('desc-row');
+  dRow.querySelectorAll('.btn-desc, .label-sep').forEach(n => n.remove());
+  let lastFamily = null;
+  for (const d of DESCRIPTORS) {
+    if (lastFamily && d.family !== lastFamily) {
+      const sep = document.createElement('span');
+      sep.className = 'label-sep'; sep.style.color = 'var(--border)'; sep.textContent = '|';
+      dRow.appendChild(sep);
+    }
+    const b = document.createElement('button');
+    b.className = 'btn-desc';
+    b.setAttribute('aria-pressed', state.descriptor === d.key ? 'true' : 'false');
+    b.textContent = d.label;
+    b.onclick = () => {
+      state.descriptor = (state.descriptor === d.key) ? null : d.key;
+      renderToolbar(); renderHomaSubRow(); render();
+    };
+    dRow.appendChild(b);
+    lastFamily = d.family;
+  }
+
+  // HOMA sub-row
+  renderHomaSubRow();
+  // Clip button
+  document.getElementById('btn-clip').setAttribute('aria-pressed', state.clipHoma ? 'true' : 'false');
+}
+
+function renderHomaSubRow() {
+  const row = document.getElementById('homa-sub-row');
+  row.querySelectorAll('.chip').forEach(n => n.remove());
+  if (state.descriptor !== 'HOMA') { row.hidden = true; return; }
+  row.hidden = false;
+  for (const comp of HOMA_DECOMP) {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.setAttribute('aria-pressed', state.homaSubs.has(comp) ? 'true' : 'false');
+    chip.appendChild(document.createTextNode(comp));
+    chip.onclick = () => {
+      if (state.homaSubs.has(comp)) {
+        if (state.homaSubs.size > 1) state.homaSubs.delete(comp);
+      } else state.homaSubs.add(comp);
+      renderHomaSubRow(); render();
+    };
+    row.appendChild(chip);
+  }
+}
+
+// ============================================================
+// 7) LEGEND
+// ============================================================
+function renderLegend() {
+  const wrap = document.getElementById('legend');
+  wrap.innerHTML = '';
+  const addSection = (heading, items) => {
+    const sec = document.createElement('div');
+    sec.className = 'legend-section';
+    const h = document.createElement('span'); h.className = 'heading'; h.textContent = heading;
+    sec.appendChild(h);
+    for (const it of items) sec.appendChild(it);
+    wrap.appendChild(sec);
+  };
+
+  // Méthode toujours en tête
+  const methodItem = document.createElement('span'); methodItem.className = 'legend-item';
+  methodItem.textContent = 'M06-2X/6-31+G(d,p) · SMD DCM';
+  addSection('Méthode', [methodItem]);
+
+  // PES
+  const pesItems = [];
+  for (const s of STEREOS) {
+    if (!state.stereos.has(s)) continue;
+    const it = document.createElement('span'); it.className = 'legend-item'; it.style.color = c(stereoColor[s]);
+    const ln = document.createElement('span'); ln.className = 'stroke-mini'; ln.style.color = c(stereoColor[s]); ln.style.borderStyle = 'solid';
+    it.appendChild(ln);
+    it.appendChild(document.createTextNode(' PES ' + STEREO_LABEL[s]));
+    pesItems.push(it);
+  }
+  if (pesItems.length) addSection('PES (Y gauche)', pesItems);
+
+  // Points stationnaires
+  const ptItems = [];
+  const mk = (label, fill, border, shape) => {
+    const it = document.createElement('span'); it.className = 'legend-item';
+    const sw = document.createElement('span'); sw.className = 'swatch';
+    sw.style.background = fill; sw.style.border = '1px solid ' + border;
+    if (shape === 'star') { sw.style.borderRadius = '0'; sw.style.transform = 'rotate(45deg)'; }
+    it.appendChild(sw); it.appendChild(document.createTextNode(' ' + label));
+    return it;
+  };
+  ptItems.push(mk('minimum (PC / PA / CA)', minColor.fill, minColor.border, 'circle'));
+  ptItems.push(mk('TS (TS1 / TS2)',          tsColor.fill,  tsColor.border,  'star'));
+  addSection('Points stationnaires', ptItems);
+
+  // Descripteur
+  if (state.descriptor) {
+    const desc = DESC_BY_KEY[state.descriptor];
+    if (desc.perMotif) {
+      const items = [];
+      const isHoma = state.descriptor === 'HOMA';
+      for (const motif of MOTIFS) {
+        if (!state.motifs.has(motif)) continue;
+        const it = document.createElement('span'); it.className = 'legend-item'; it.style.color = c(motifColor[motif]);
+        const ln = document.createElement('span'); ln.className = 'stroke-mini'; ln.style.color = c(motifColor[motif]);
+        it.appendChild(ln);
+        it.appendChild(document.createTextNode(' ' + MOTIF_LABEL[motif]));
+        items.push(it);
+      }
+      if (isHoma) {
+        const subs = Array.from(state.homaSubs);
+        for (const comp of subs) {
+          const it = document.createElement('span'); it.className = 'legend-item'; it.style.color = 'var(--muted)';
+          const ln = document.createElement('span'); ln.className = 'stroke-mini';
+          ln.style.color = 'var(--text)';
+          ln.style.borderTopStyle = comp === 'HOMA' ? 'solid' : comp === 'EN' ? 'dashed' : 'dotted';
+          it.appendChild(ln);
+          it.appendChild(document.createTextNode(' ' + comp));
+          items.push(it);
+        }
+      }
+      addSection(desc.label + (isHoma ? ' (HOMA + EN + GEO)' : '') + ' — Y droit', items);
+    } else {
+      const items = [];
+      for (const s of STEREOS) {
+        if (!state.stereos.has(s)) continue;
+        const it = document.createElement('span'); it.className = 'legend-item'; it.style.color = c(stereoColor[s]);
+        const ln = document.createElement('span'); ln.className = 'stroke-mini'; ln.style.color = c(stereoColor[s]);
+        it.appendChild(ln);
+        it.appendChild(document.createTextNode(' ' + desc.label + ' ' + STEREO_LABEL[s]));
+        items.push(it);
+      }
+      addSection(desc.label + ' (global) — Y droit', items);
+    }
+  }
+
+  // Marqueurs forme (stéréo)
+  const formItems = [];
+  for (const s of STEREOS) {
+    if (!state.stereos.has(s)) continue;
+    const it = document.createElement('span'); it.className = 'legend-item';
+    const sw = document.createElement('span'); sw.className = 'swatch';
+    sw.style.background = 'transparent'; sw.style.border = '2px solid currentColor';
+    if (s === 'exo') { sw.style.borderRadius = '0'; sw.style.width = '0'; sw.style.height = '0';
+      sw.style.borderLeft = '6px solid transparent'; sw.style.borderRight = '6px solid transparent';
+      sw.style.borderBottom = '10px solid currentColor'; sw.style.borderTop = 'none'; }
+    it.appendChild(sw);
+    it.appendChild(document.createTextNode(' ' + STEREO_LABEL[s] + (s === 'endo' ? ' (○)' : ' (△)')));
+    formItems.push(it);
+  }
+  if (formItems.length) addSection('Stéréo (forme des marqueurs descripteurs)', formItems);
+}
+
+// ============================================================
+// 8) INFO PANEL
+// ============================================================
+function renderInfoPanel() {
+  const panel = document.getElementById('info-panel');
+  panel.innerHTML = '';
+  const sel = state.selected;
+  if (!sel) {
+    const h = document.createElement('h2'); h.textContent = 'Sélectionne un point'; panel.appendChild(h);
+    const p = document.createElement('p'); p.className = 'muted';
+    p.textContent = 'Clique sur un marqueur (PC / TS1 / PA / TS2 / CA) pour voir la structure et tous les descripteurs des 6 motifs cycliques.';
+    panel.appendChild(p);
+    return;
+  }
+  const p = DATA[sel.stereo].arox[sel.state];
+  const h = document.createElement('h2'); h.textContent = `${STATE_LABEL[sel.state]} — ${STEREO_LABEL[sel.stereo]}`; panel.appendChild(h);
+  const meta = document.createElement('p'); meta.className = 'meta';
+  meta.innerHTML = `${STATE_ROLE[sel.state]} · ΔE = <strong>${fmt(p.y, 3)}</strong> kcal mol⁻¹`;
+  panel.appendChild(meta);
+
+  // Structure image
+  const img = document.createElement('img'); img.className = 'struct';
+  img.src = p.image; img.alt = `Structure ${STEREO_LABEL[sel.stereo]} ${STATE_LABEL[sel.state]}`;
+  img.onerror = () => { img.style.display = 'none'; };
+  panel.appendChild(img);
+
+  // Tabs (HOMA decomp / LDM / Q / S / global)
+  const families = ['HOMA', 'LDM', 'Q', 'S', 'global'];
+  const tabsBar = document.createElement('div'); tabsBar.className = 'tabs';
+  if (!panel.dataset.activeFamily) panel.dataset.activeFamily = state.descriptor ? (DESC_BY_KEY[state.descriptor].family) : 'HOMA';
+  for (const fam of families) {
+    const b = document.createElement('button'); b.className = 'tab-btn'; b.textContent = fam;
+    b.setAttribute('aria-pressed', panel.dataset.activeFamily === fam ? 'true' : 'false');
+    b.onclick = () => { panel.dataset.activeFamily = fam; renderInfoPanel(); };
+    tabsBar.appendChild(b);
+  }
+  panel.appendChild(tabsBar);
+
+  // Table
+  const fam = panel.dataset.activeFamily;
+  if (fam === 'global') {
+    const t = document.createElement('table');
+    t.innerHTML = '<thead><tr><th>Descripteur</th><th>Valeur</th></tr></thead>';
+    const tb = document.createElement('tbody');
+    for (const key of ['HOMA_TOTAL','Q_G','S_hom_G','S_G']) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${DESC_BY_KEY[key].label}</td><td>${fmtAuto(p.desc._global[key])}</td>`;
+      if (state.descriptor === key) tr.classList.add('highlight');
+      tb.appendChild(tr);
+    }
+    t.appendChild(tb); panel.appendChild(t);
+  } else {
+    const keys = fam === 'HOMA' ? ['HOMA','EN','GEO']
+               : fam === 'LDM'  ? ['LDM_OffDiag','LDM_Diag','LDM_Frob','LDM_RMSD','LDM_CT']
+               : fam === 'Q'    ? ['Q_Frob','Q_RMSD']
+               :                  ['S_hom'];
+    const t = document.createElement('table');
+    let header = '<thead><tr><th>Motif</th>';
+    for (const k of keys) header += `<th>${(DESC_BY_KEY[k] || {label:k}).label}</th>`;
+    header += '</tr></thead>';
+    t.innerHTML = header;
+    const tb = document.createElement('tbody');
+    for (const motif of MOTIFS) {
+      const m = p.desc[motif];
+      const tr = document.createElement('tr');
+      let row = `<td>${MOTIF_LABEL[motif]}</td>`;
+      for (const k of keys) row += `<td>${fmtAuto(m[k])}</td>`;
+      tr.innerHTML = row;
+      if (state.descriptor && DESC_BY_KEY[state.descriptor]
+          && DESC_BY_KEY[state.descriptor].perMotif && keys.includes(state.descriptor)) {
+        // no row highlight needed — column-level focus via tab
+      }
+      tb.appendChild(tr);
+    }
+    t.appendChild(tb); panel.appendChild(t);
+  }
+}
+
+// ============================================================
+// 9) PNG DOWNLOAD
+// ============================================================
+function downloadPNG() {
+  const DPR = Math.max(1, window.devicePixelRatio || 1);
+  const F_TITLE = 30;
+  const F_SUB   = Math.round(13 * DPR);
+  const chartImg = chart.toBase64Image('image/png', 1);
+  const im = new Image();
+  im.onload = () => {
+    const cw = im.naturalWidth, ch = im.naturalHeight;
+    const padTop = 110, padBot = 40, padX = 30;
+    const cnv = document.createElement('canvas');
+    cnv.width = cw + 2*padX;
+    cnv.height = ch + padTop + padBot;
+    const ctx = cnv.getContext('2d');
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cnv.width, cnv.height);
+    ctx.fillStyle = '#111';
+    ctx.font = `600 ${F_TITLE}px -apple-system, 'Segoe UI', sans-serif`;
+    ctx.textBaseline = 'top';
+    ctx.fillText('Diels-Alder polaire — profil PES & descripteurs AroX endo/exo', padX, 14);
+    ctx.font = `${F_SUB}px -apple-system, 'Segoe UI', sans-serif`;
+    ctx.fillStyle = '#444';
+    ctx.fillText('Method : M06-2X/6-31+G(d,p) · SMD DCM · Gaussian 16', padX, 14 + F_TITLE + 6);
+    const cfg = describeState();
+    ctx.fillText('Config : ' + cfg, padX, 14 + F_TITLE + 6 + F_SUB + 4);
+    ctx.drawImage(im, padX, padTop);
+    const url = cnv.toDataURL('image/png');
+    const a = document.createElement('a');
+    const today = new Date().toISOString().slice(0, 10);
+    const slug = state.descriptor ? state.descriptor.toLowerCase() : 'pes';
+    a.href = url; a.download = `da-polaire_${slug}_${today}.png`;
+    a.click();
+  };
+  im.src = chartImg;
+}
+function describeState() {
+  const parts = [];
+  parts.push('stéréos : ' + Array.from(state.stereos).join(' + '));
+  if (state.descriptor) {
+    parts.push('descripteur : ' + DESC_BY_KEY[state.descriptor].label);
+    if (state.descriptor === 'HOMA') parts.push('décomp : ' + Array.from(state.homaSubs).join(','));
+    parts.push('motifs : ' + Array.from(state.motifs).map(m => MOTIF_LABEL[m]).join(', '));
+  } else {
+    parts.push('descripteur : (aucun)');
+  }
+  if (state.clipHoma) parts.push('clip [−2, 1.5]');
+  return parts.join(' | ');
+}
+
+// ============================================================
+// 10) INIT
+// ============================================================
+function init() {
+  chart = new Chart(document.getElementById('chart').getContext('2d'), {
+    type: 'line',
+    data: { datasets: buildDatasets() },
+    options: chartOptions(),
+  });
+  renderToolbar();
+  renderLegend();
+  document.getElementById('btn-clip').onclick = () => {
+    state.clipHoma = !state.clipHoma;
+    document.getElementById('btn-clip').setAttribute('aria-pressed', state.clipHoma ? 'true' : 'false');
+    render();
+  };
+  document.getElementById('btn-default').onclick = () => {
+    state.stereos = new Set(['endo', 'exo']);
+    state.motifs  = new Set(MOTIFS);
+    state.descriptor = null;
+    state.homaSubs = new Set(['HOMA']);
+    state.clipHoma = false;
+    state.selected = null;
+    renderToolbar(); renderInfoPanel(); render();
+  };
+  document.getElementById('btn-download').onclick = downloadPNG;
+}
+init();
+})();
+</script>
+</body>
+</html>
