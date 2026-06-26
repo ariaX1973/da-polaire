@@ -147,6 +147,9 @@ footer { margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border)
   <div class="row" id="homa-sub-row" hidden>
     <span class="label">HOMA décomp.</span>
   </div>
+  <div class="row" id="nics-sub-row" hidden>
+    <span class="label">NICS Bq</span>
+  </div>
   <div class="row" id="action-row">
     <span class="label">Options</span>
     <button class="chip" id="btn-clip" aria-pressed="false" title="Tronque l'axe descripteur à [-2, 1.5] pour éviter que les valeurs HOMA extrêmes (cycle manuel libre, jusqu'à -300) ne squashent l'affichage">Clip HOMA [−2, 1.5]</button>
@@ -177,6 +180,9 @@ footer { margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border)
     <div class="compare-row" id="cmp-motifs-row">
       <span class="label">Motifs</span>
     </div>
+    <div class="compare-row" id="cmp-nicsbq-row">
+      <span class="label">NICS Bq</span>
+    </div>
     <div class="compare-row" id="cmp-desc-row">
       <span class="label">Descripteurs</span>
     </div>
@@ -204,6 +210,9 @@ footer { margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border)
     </div>
     <div class="compare-row" id="grid-motifs-row">
       <span class="label">Motifs</span>
+    </div>
+    <div class="compare-row" id="grid-nicsbq-row">
+      <span class="label">NICS Bq</span>
     </div>
     <div class="compare-row" id="grid-desc-row">
       <span class="label">Descripteurs</span>
@@ -270,7 +279,7 @@ const tsColor  = { fill:'#D85A30', border:'#993C1D' };
 // ============================================================
 // 2) DATA — généré par build_dapolaire_figure_data.py
 // ============================================================
-const DATA = {"endo":{"profile":[{"x":0,"y":0},{"x":1,"y":17.072},{"x":2,"y":7.601},{"x":3,"y":9.046},{"x":4,"y":-11.103}],"arox":{"PC":{"x":0,"y":0,"role":"pre-complex (reference, dE=0)","image":"reactif.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,4,19,21,30,28]","HOMA":-246.487062,"EN":77.718952,"GEO":169.76811,"LDM_OffDiag":1.33921,"LDM_Diag":1.767498,"LDM_Frob":2.217551,"LDM_RMSD":0.369592,"LDM_CT":-19.759444,"Q_Frob":0.521618,"Q_RMSD":0.095234,"S_hom":0.168421},"ringB":{"motif_label":"ELEMENTAIRE (6) [28,30,35,36,39,34]","HOMA":0.883733,"EN":0.027636,"GEO":0.088631,"LDM_OffDiag":0.476837,"LDM_Diag":1.501405,"LDM_Frob":1.575306,"LDM_RMSD":0.262551,"LDM_CT":-11.813889,"Q_Frob":0.256738,"Q_RMSD":0.046874,"S_hom":0.387227},"ringC":{"motif_label":"ELEMENTAIRE (6) [35,36,38,45,42,37]","HOMA":0.884397,"EN":0.030579,"GEO":0.085024,"LDM_OffDiag":0.504212,"LDM_Diag":1.369871,"LDM_Frob":1.459718,"LDM_RMSD":0.243286,"LDM_CT":-10.443889,"Q_Frob":0.28723,"Q_RMSD":0.052441,"S_hom":0.393395},"periphAB":{"motif_label":"PERIPHERAL (10) [1,4,19,21,30,35,36,39,34,28]","HOMA":-147.550804,"EN":29.556201,"GEO":118.994603,"LDM_OffDiag":1.338806,"LDM_Diag":2.11903,"LDM_Frob":2.50653,"LDM_RMSD":0.250653,"LDM_CT":-13.935667,"Q_Frob":0.596318,"Q_RMSD":0.062857,"S_hom":0.13439},"periphBC":{"motif_label":"PERIPHERAL (10) [28,30,35,37,42,45,38,36,39,34]","HOMA":0.902487,"EN":0.012869,"GEO":0.084644,"LDM_OffDiag":0.684649,"LDM_Diag":1.834078,"LDM_Frob":1.9577,"LDM_RMSD":0.19577,"LDM_CT":-7.824667,"Q_Frob":0.437022,"Q_RMSD":0.046066,"S_hom":0.234867},"periphABC":{"motif_label":"PERIPHERAL (14) [1,4,19,21,30,35,37,42,45,38,36,3...]","HOMA":-105.12754,"EN":15.155776,"GEO":90.971765,"LDM_OffDiag":1.421251,"LDM_Diag":2.366414,"LDM_Frob":2.760411,"LDM_RMSD":0.197172,"LDM_CT":-10.470714,"Q_Frob":0.710291,"Q_RMSD":0.05265,"S_hom":0.11046},"_global":{"HOMA_TOTAL":-91.878099,"Q_G":0.038514,"S_hom_G":0.066017,"S_G":0.091497}}},"TS1":{"x":1,"y":17.072,"role":"transition state 1","image":"endo-TS1.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [9,10,14,13,12,11]","HOMA":-80.496051,"EN":23.828661,"GEO":57.667391,"LDM_OffDiag":1.072012,"LDM_Diag":1.902296,"LDM_Frob":2.183561,"LDM_RMSD":0.363927,"LDM_CT":-20.752778,"Q_Frob":0.431211,"Q_RMSD":0.078728,"S_hom":0.210805},"ringB":{"motif_label":"ELEMENTAIRE (6) [3,4,10,9,8,7]","HOMA":0.648235,"EN":0.16297,"GEO":0.188796,"LDM_OffDiag":0.526693,"LDM_Diag":1.539868,"LDM_Frob":1.627452,"LDM_RMSD":0.271242,"LDM_CT":-13.426667,"Q_Frob":0.285718,"Q_RMSD":0.052165,"S_hom":0.3502},"ringC":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.943933,"EN":0.020193,"GEO":0.035873,"LDM_OffDiag":0.483153,"LDM_Diag":1.350091,"LDM_Frob":1.43394,"LDM_RMSD":0.23899,"LDM_CT":-9.984722,"Q_Frob":0.270389,"Q_RMSD":0.049366,"S_hom":0.412314},"periphAB":{"motif_label":"PERIPHERAL (10) [3,4,10,14,13,12,11,9,8,7]","HOMA":-48.078076,"EN":9.565689,"GEO":39.512387,"LDM_OffDiag":1.091016,"LDM_Diag":2.22426,"LDM_Frob":2.477428,"LDM_RMSD":0.247743,"LDM_CT":-14.818167,"Q_Frob":0.511362,"Q_RMSD":0.053902,"S_hom":0.152969},"periphBC":{"motif_label":"PERIPHERAL (10) [1,2,3,7,8,9,10,4,5,6]","HOMA":0.789501,"EN":0.059914,"GEO":0.150585,"LDM_OffDiag":0.680014,"LDM_Diag":1.856756,"LDM_Frob":1.977362,"LDM_RMSD":0.197736,"LDM_CT":-8.6675,"Q_Frob":0.429326,"Q_RMSD":0.045255,"S_hom":0.221544},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,7,8,9,11,12,13,14,10,4,5,6]","HOMA":-34.055368,"EN":4.888525,"GEO":30.166843,"LDM_OffDiag":1.185939,"LDM_Diag":2.454319,"LDM_Frob":2.725827,"LDM_RMSD":0.194702,"LDM_CT":-10.975,"Q_Frob":0.623749,"Q_RMSD":0.046235,"S_hom":0.121764},"_global":{"HOMA_TOTAL":-29.693702,"Q_G":0.037911,"S_hom_G":0.067584,"S_G":0.093925}}},"PA":{"x":2,"y":7.601,"role":"post-addition intermediate","image":"endo-PA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,4,19,21,30,28]","HOMA":-52.8666,"EN":14.269727,"GEO":39.596873,"LDM_OffDiag":0.9441,"LDM_Diag":2.005465,"LDM_Frob":2.216577,"LDM_RMSD":0.369429,"LDM_CT":-21.697778,"Q_Frob":0.372079,"Q_RMSD":0.067932,"S_hom":0.215695},"ringB":{"motif_label":"ELEMENTAIRE (6) [28,30,35,36,39,34]","HOMA":0.050504,"EN":0.473803,"GEO":0.475692,"LDM_OffDiag":0.61329,"LDM_Diag":1.565644,"LDM_Frob":1.681477,"LDM_RMSD":0.280246,"LDM_CT":-14.5175,"Q_Frob":0.356183,"Q_RMSD":0.06503,"S_hom":0.321571},"ringC":{"motif_label":"ELEMENTAIRE (6) [35,36,38,45,42,37]","HOMA":0.959015,"EN":0.018255,"GEO":0.02273,"LDM_OffDiag":0.47731,"LDM_Diag":1.333617,"LDM_Frob":1.41646,"LDM_RMSD":0.236077,"LDM_CT":-9.771667,"Q_Frob":0.265892,"Q_RMSD":0.048545,"S_hom":0.420765},"periphAB":{"motif_label":"PERIPHERAL (10) [1,4,19,21,30,35,36,39,34,28]","HOMA":-31.51589,"EN":5.78935,"GEO":26.726539,"LDM_OffDiag":0.993899,"LDM_Diag":2.298293,"LDM_Frob":2.503994,"LDM_RMSD":0.250399,"LDM_CT":-15.546833,"Q_Frob":0.484254,"Q_RMSD":0.051045,"S_hom":0.15318},"periphBC":{"motif_label":"PERIPHERAL (10) [28,30,35,37,42,45,38,36,39,34]","HOMA":0.439265,"EN":0.169867,"GEO":0.390868,"LDM_OffDiag":0.72841,"LDM_Diag":1.871376,"LDM_Frob":2.008141,"LDM_RMSD":0.200814,"LDM_CT":-9.246333,"Q_Frob":0.46875,"Q_RMSD":0.049411,"S_hom":0.210161},"periphABC":{"motif_label":"PERIPHERAL (14) [1,4,19,21,30,35,37,42,45,38,36,3...]","HOMA":-22.219234,"EN":2.95166,"GEO":20.267574,"LDM_OffDiag":1.095387,"LDM_Diag":2.516537,"LDM_Frob":2.7446,"LDM_RMSD":0.196043,"LDM_CT":-11.458333,"Q_Frob":0.594871,"Q_RMSD":0.044095,"S_hom":0.121791},"_global":{"HOMA_TOTAL":-19.444118,"Q_G":0.037719,"S_hom_G":0.069244,"S_G":0.09335}}},"TS2":{"x":3,"y":9.046,"role":"transition state 2","image":"endo-TS2.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-22.689445,"EN":7.665878,"GEO":16.023567,"LDM_OffDiag":0.836315,"LDM_Diag":1.972838,"LDM_Frob":2.142782,"LDM_RMSD":0.35713,"LDM_CT":-20.960278,"Q_Frob":0.380497,"Q_RMSD":0.069469,"S_hom":0.246784},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":-0.057717,"EN":0.52599,"GEO":0.531727,"LDM_OffDiag":0.621875,"LDM_Diag":1.544505,"LDM_Frob":1.664999,"LDM_RMSD":0.2775,"LDM_CT":-14.528056,"Q_Frob":0.362435,"Q_RMSD":0.066171,"S_hom":0.318646},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.967446,"EN":0.014331,"GEO":0.018224,"LDM_OffDiag":0.476954,"LDM_Diag":1.341954,"LDM_Frob":1.424193,"LDM_RMSD":0.237365,"LDM_CT":-9.771389,"Q_Frob":0.266756,"Q_RMSD":0.048703,"S_hom":0.422946},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-13.399814,"EN":3.228837,"GEO":11.170977,"LDM_OffDiag":0.904376,"LDM_Diag":2.272032,"LDM_Frob":2.445409,"LDM_RMSD":0.244541,"LDM_CT":-15.139167,"Q_Frob":0.490962,"Q_RMSD":0.051752,"S_hom":0.165473},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.373647,"EN":0.186969,"GEO":0.439384,"LDM_OffDiag":0.734001,"LDM_Diag":1.857491,"LDM_Frob":1.997256,"LDM_RMSD":0.199726,"LDM_CT":-9.259667,"Q_Frob":0.47325,"Q_RMSD":0.049885,"S_hom":0.208898},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-9.279669,"EN":1.642324,"GEO":8.637346,"LDM_OffDiag":1.017796,"LDM_Diag":2.495378,"LDM_Frob":2.694962,"LDM_RMSD":0.192497,"LDM_CT":-11.156667,"Q_Frob":0.599609,"Q_RMSD":0.044446,"S_hom":0.12918},"_global":{"HOMA_TOTAL":-8.143552,"Q_G":0.03778,"S_hom_G":0.068377,"S_G":0.094161}}},"CA":{"x":4,"y":-11.103,"role":"cycloadduct (product)","image":"endo-CA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":-1.425336,"EN":1.626127,"GEO":0.799209,"LDM_OffDiag":0.655974,"LDM_Diag":1.903214,"LDM_Frob":2.013089,"LDM_RMSD":0.335515,"LDM_CT":-19.019722,"Q_Frob":0.370319,"Q_RMSD":0.067611,"S_hom":0.28827},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,6,7,8,9,10]","HOMA":-0.567253,"EN":0.793005,"GEO":0.774248,"LDM_OffDiag":0.65246,"LDM_Diag":1.526783,"LDM_Frob":1.660353,"LDM_RMSD":0.276725,"LDM_CT":-14.948056,"Q_Frob":0.385878,"Q_RMSD":0.070451,"S_hom":0.308196},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.992302,"EN":0.003609,"GEO":0.004089,"LDM_OffDiag":0.485161,"LDM_Diag":1.357484,"LDM_Frob":1.441577,"LDM_RMSD":0.240263,"LDM_CT":-9.5525,"Q_Frob":0.278794,"Q_RMSD":0.050901,"S_hom":0.429507},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,3,4,5,6,7,8,9,10]","HOMA":-0.731237,"EN":0.874073,"GEO":0.857164,"LDM_OffDiag":0.774511,"LDM_Diag":2.219731,"LDM_Frob":2.350972,"LDM_RMSD":0.235097,"LDM_CT":-14.307,"Q_Frob":0.495441,"Q_RMSD":0.052224,"S_hom":0.17807},"periphBC":{"motif_label":"PERIPHERAL (10) [1,6,7,8,9,14,13,12,11,10]","HOMA":0.062154,"EN":0.283664,"GEO":0.654181,"LDM_OffDiag":0.762435,"LDM_Diag":1.847477,"LDM_Frob":1.998619,"LDM_RMSD":0.199862,"LDM_CT":-9.404667,"Q_Frob":0.494161,"Q_RMSD":0.052089,"S_hom":0.204994},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,4,5,6,7,8,9,14,13,12,11,10]","HOMA":-0.234808,"EN":0.444332,"GEO":0.790476,"LDM_OffDiag":0.920623,"LDM_Diag":2.451389,"LDM_Frob":2.61856,"LDM_RMSD":0.18704,"LDM_CT":-10.502262,"Q_Frob":0.61123,"Q_RMSD":0.045307,"S_hom":0.136451},"_global":{"HOMA_TOTAL":-0.290282,"Q_G":0.038202,"S_hom_G":0.066643,"S_G":0.093056}}}},"barrier1_kcal":17.072,"barrier2_kcal":1.4449999999999994,"delta_E_kcal":-11.103},"exo":{"profile":[{"x":0,"y":0},{"x":1,"y":17.313},{"x":2,"y":8.321},{"x":3,"y":12.265},{"x":4,"y":-5.919}],"arox":{"PC":{"x":0,"y":0,"role":"pre-complex (reference, dE=0)","image":"reactif.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [9,10,17,16,15,14]","HOMA":-314.18523,"EN":102.909697,"GEO":212.275533,"LDM_OffDiag":1.345766,"LDM_Diag":1.774502,"LDM_Frob":2.227093,"LDM_RMSD":0.371182,"LDM_CT":-19.893611,"Q_Frob":0.500234,"Q_RMSD":0.09133,"S_hom":0.165606},"ringB":{"motif_label":"ELEMENTAIRE (6) [2,3,7,8,9,10]","HOMA":0.879537,"EN":0.02922,"GEO":0.091243,"LDM_OffDiag":0.481724,"LDM_Diag":1.48677,"LDM_Frob":1.562863,"LDM_RMSD":0.260477,"LDM_CT":-11.619722,"Q_Frob":0.262026,"Q_RMSD":0.047839,"S_hom":0.388213},"ringC":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.884114,"EN":0.030009,"GEO":0.085877,"LDM_OffDiag":0.505294,"LDM_Diag":1.368014,"LDM_Frob":1.458349,"LDM_RMSD":0.243058,"LDM_CT":-10.380278,"Q_Frob":0.288622,"Q_RMSD":0.052695,"S_hom":0.394627},"periphAB":{"motif_label":"PERIPHERAL (10) [2,3,7,8,9,14,15,16,17,10]","HOMA":-188.172097,"EN":38.897742,"GEO":150.274355,"LDM_OffDiag":1.348383,"LDM_Diag":2.114013,"LDM_Frob":2.507426,"LDM_RMSD":0.250743,"LDM_CT":-13.9755,"Q_Frob":0.581096,"Q_RMSD":0.061253,"S_hom":0.132019},"periphBC":{"motif_label":"PERIPHERAL (10) [1,2,10,9,8,7,3,4,5,6]","HOMA":0.901736,"EN":0.01281,"GEO":0.085455,"LDM_OffDiag":0.691216,"LDM_Diag":1.822803,"LDM_Frob":1.949459,"LDM_RMSD":0.194946,"LDM_CT":-7.673833,"Q_Frob":0.442697,"Q_RMSD":0.046664,"S_hom":0.23578},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,10,17,16,15,14,9,8,7,3,4,5,6]","HOMA":-134.141489,"EN":19.913412,"GEO":115.228076,"LDM_OffDiag":1.429579,"LDM_Diag":2.362452,"LDM_Frob":2.761317,"LDM_RMSD":0.197237,"LDM_CT":-10.419881,"Q_Frob":0.700313,"Q_RMSD":0.051911,"S_hom":0.110094},"_global":{"HOMA_TOTAL":-117.265947,"Q_G":0.038534,"S_hom_G":0.066105,"S_G":0.091358}}},"TS1":{"x":1,"y":17.313,"role":"transition state 1","image":"exo-TS1.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [9,10,17,16,15,14]","HOMA":-75.523568,"EN":22.402558,"GEO":54.12101,"LDM_OffDiag":1.056656,"LDM_Diag":1.909389,"LDM_Frob":2.182266,"LDM_RMSD":0.363711,"LDM_CT":-20.848889,"Q_Frob":0.426289,"Q_RMSD":0.077829,"S_hom":0.211083},"ringB":{"motif_label":"ELEMENTAIRE (6) [2,3,7,8,9,10]","HOMA":0.62586,"EN":0.174727,"GEO":0.199413,"LDM_OffDiag":0.533269,"LDM_Diag":1.523834,"LDM_Frob":1.614449,"LDM_RMSD":0.269075,"LDM_CT":-13.297778,"Q_Frob":0.293008,"Q_RMSD":0.053496,"S_hom":0.349521},"ringC":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.941169,"EN":0.021518,"GEO":0.037313,"LDM_OffDiag":0.485422,"LDM_Diag":1.334936,"LDM_Frob":1.420453,"LDM_RMSD":0.236742,"LDM_CT":-9.834722,"Q_Frob":0.27277,"Q_RMSD":0.049801,"S_hom":0.413314},"periphAB":{"motif_label":"PERIPHERAL (10) [2,3,7,8,9,14,15,16,17,10]","HOMA":-45.104641,"EN":9.049505,"GEO":37.055135,"LDM_OffDiag":1.079705,"LDM_Diag":2.218609,"LDM_Frob":2.467385,"LDM_RMSD":0.246739,"LDM_CT":-14.8095,"Q_Frob":0.509046,"Q_RMSD":0.053658,"S_hom":0.15238},"periphBC":{"motif_label":"PERIPHERAL (10) [1,2,10,9,8,7,3,4,5,6]","HOMA":0.77752,"EN":0.063726,"GEO":0.158753,"LDM_OffDiag":0.687922,"LDM_Diag":1.838533,"LDM_Frob":1.963018,"LDM_RMSD":0.196302,"LDM_CT":-8.523667,"Q_Frob":0.436502,"Q_RMSD":0.046011,"S_hom":0.221643},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,10,17,16,15,14,9,8,7,3,4,5,6]","HOMA":-31.930454,"EN":4.622126,"GEO":28.308328,"LDM_OffDiag":1.17708,"LDM_Diag":2.445477,"LDM_Frob":2.714015,"LDM_RMSD":0.193858,"LDM_CT":-10.9275,"Q_Frob":0.623523,"Q_RMSD":0.046219,"S_hom":0.121745},"_global":{"HOMA_TOTAL":-27.836425,"Q_G":0.037939,"S_hom_G":0.067445,"S_G":0.093829}}},"PA":{"x":2,"y":8.321,"role":"post-addition intermediate","image":"exo-PA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-68.863782,"EN":17.616233,"GEO":52.247549,"LDM_OffDiag":0.965466,"LDM_Diag":2.034953,"LDM_Frob":2.252367,"LDM_RMSD":0.375395,"LDM_CT":-22.076944,"Q_Frob":0.36903,"Q_RMSD":0.067375,"S_hom":0.208155},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":0.052115,"EN":0.473352,"GEO":0.474532,"LDM_OffDiag":0.61972,"LDM_Diag":1.568458,"LDM_Frob":1.68645,"LDM_RMSD":0.281075,"LDM_CT":-14.473611,"Q_Frob":0.362479,"Q_RMSD":0.066179,"S_hom":0.320861},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.962307,"EN":0.016668,"GEO":0.021025,"LDM_OffDiag":0.482464,"LDM_Diag":1.320752,"LDM_Frob":1.406115,"LDM_RMSD":0.234352,"LDM_CT":-9.575,"Q_Frob":0.271439,"Q_RMSD":0.049558,"S_hom":0.422596},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-41.118944,"EN":7.074492,"GEO":35.044453,"LDM_OffDiag":1.017141,"LDM_Diag":2.316379,"LDM_Frob":2.52986,"LDM_RMSD":0.252986,"LDM_CT":-15.748833,"Q_Frob":0.485635,"Q_RMSD":0.05119,"S_hom":0.148922},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.440406,"EN":0.168573,"GEO":0.391021,"LDM_OffDiag":0.739385,"LDM_Diag":1.868786,"LDM_Frob":2.009739,"LDM_RMSD":0.200974,"LDM_CT":-9.132167,"Q_Frob":0.477855,"Q_RMSD":0.05037,"S_hom":0.210152},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-29.078434,"EN":3.603391,"GEO":26.475043,"LDM_OffDiag":1.1194,"LDM_Diag":2.529409,"LDM_Frob":2.766038,"LDM_RMSD":0.197574,"LDM_CT":-11.547976,"Q_Frob":0.600621,"Q_RMSD":0.044521,"S_hom":0.11964},"_global":{"HOMA_TOTAL":-25.44357,"Q_G":0.037707,"S_hom_G":0.068941,"S_G":0.093129}}},"TS2":{"x":3,"y":12.265,"role":"transition state 2","image":"exo-TS2.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-18.453985,"EN":6.691914,"GEO":12.762071,"LDM_OffDiag":0.806118,"LDM_Diag":1.981876,"LDM_Frob":2.139547,"LDM_RMSD":0.356591,"LDM_CT":-20.929444,"Q_Frob":0.375457,"Q_RMSD":0.068549,"S_hom":0.253141},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":-0.09183,"EN":0.540506,"GEO":0.551324,"LDM_OffDiag":0.629824,"LDM_Diag":1.53668,"LDM_Frob":1.660741,"LDM_RMSD":0.27679,"LDM_CT":-14.436667,"Q_Frob":0.369919,"Q_RMSD":0.067538,"S_hom":0.317923},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.972779,"EN":0.012002,"GEO":0.01522,"LDM_OffDiag":0.481021,"LDM_Diag":1.342409,"LDM_Frob":1.425988,"LDM_RMSD":0.237665,"LDM_CT":-9.656667,"Q_Frob":0.271721,"Q_RMSD":0.049609,"S_hom":0.425499},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-10.862368,"EN":2.850154,"GEO":9.012214,"LDM_OffDiag":0.885691,"LDM_Diag":2.274976,"LDM_Frob":2.441304,"LDM_RMSD":0.24413,"LDM_CT":-15.112,"Q_Frob":0.490843,"Q_RMSD":0.051739,"S_hom":0.16683},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.351086,"EN":0.19337,"GEO":0.455543,"LDM_OffDiag":0.744983,"LDM_Diag":1.852484,"LDM_Frob":1.996672,"LDM_RMSD":0.199667,"LDM_CT":-9.166,"Q_Frob":0.482451,"Q_RMSD":0.050855,"S_hom":0.208764},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-7.468703,"EN":1.451791,"GEO":7.016911,"LDM_OffDiag":1.004384,"LDM_Diag":2.499166,"LDM_Frob":2.693439,"LDM_RMSD":0.192389,"LDM_CT":-11.112143,"Q_Frob":0.60278,"Q_RMSD":0.044681,"S_hom":0.130223},"_global":{"HOMA_TOTAL":-6.562502,"Q_G":0.037816,"S_hom_G":0.067969,"S_G":0.094105}}},"CA":{"x":4,"y":-5.919,"role":"cycloadduct (product)","image":"exo-CA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":-1.844188,"EN":1.876611,"GEO":0.967577,"LDM_OffDiag":0.665711,"LDM_Diag":1.890483,"LDM_Frob":2.004269,"LDM_RMSD":0.334045,"LDM_CT":-18.877778,"Q_Frob":0.382608,"Q_RMSD":0.069854,"S_hom":0.288665},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,6,7,8,9,10]","HOMA":-0.51276,"EN":0.744364,"GEO":0.768396,"LDM_OffDiag":0.652594,"LDM_Diag":1.502317,"LDM_Frob":1.637937,"LDM_RMSD":0.272989,"LDM_CT":-14.542778,"Q_Frob":0.386692,"Q_RMSD":0.0706,"S_hom":0.3115},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,14,13,12,11]","HOMA":0.991532,"EN":0.004381,"GEO":0.004087,"LDM_OffDiag":0.483949,"LDM_Diag":1.350196,"LDM_Frob":1.434307,"LDM_RMSD":0.239051,"LDM_CT":-9.531944,"Q_Frob":0.277324,"Q_RMSD":0.050632,"S_hom":0.42953},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,3,4,5,6,7,8,9,10]","HOMA":-0.921366,"EN":0.935783,"GEO":0.985583,"LDM_OffDiag":0.789024,"LDM_Diag":2.19648,"LDM_Frob":2.333899,"LDM_RMSD":0.23339,"LDM_CT":-13.971,"Q_Frob":0.508381,"Q_RMSD":0.053588,"S_hom":0.180063},"periphBC":{"motif_label":"PERIPHERAL (10) [1,6,7,8,9,11,12,13,14,10]","HOMA":0.09325,"EN":0.27329,"GEO":0.633461,"LDM_OffDiag":0.762573,"LDM_Diag":1.828475,"LDM_Frob":1.981121,"LDM_RMSD":0.198112,"LDM_CT":-9.2065,"Q_Frob":0.495123,"Q_RMSD":0.052191,"S_hom":0.206101},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,4,5,6,7,8,9,11,12,13,14,10]","HOMA":-0.371757,"EN":0.4825,"GEO":0.889258,"LDM_OffDiag":0.931108,"LDM_Diag":2.431232,"LDM_Frob":2.603431,"LDM_RMSD":0.185959,"LDM_CT":-10.285833,"Q_Frob":0.620784,"Q_RMSD":0.046016,"S_hom":0.137534},"_global":{"HOMA_TOTAL":-0.418659,"Q_G":0.038193,"S_hom_G":0.066694,"S_G":0.093018}}}},"barrier1_kcal":17.313,"barrier2_kcal":3.944000000000001,"delta_E_kcal":-5.919}};
+const DATA = {"endo":{"profile":[{"x":0,"y":0},{"x":1,"y":17.072},{"x":2,"y":7.601},{"x":3,"y":9.046},{"x":4,"y":-11.103}],"arox":{"PC":{"x":0,"y":0,"role":"pre-complex (reference, dE=0)","image":"reactif.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,4,19,21,30,28]","HOMA":-246.487062,"EN":77.718952,"GEO":169.76811,"LDM_OffDiag":1.33921,"LDM_Diag":1.767498,"LDM_Frob":2.217551,"LDM_RMSD":0.369592,"LDM_CT":-19.759444,"Q_Frob":0.521618,"Q_RMSD":0.095234,"S_hom":0.168421},"ringB":{"motif_label":"ELEMENTAIRE (6) [28,30,35,36,39,34]","HOMA":0.883733,"EN":0.027636,"GEO":0.088631,"LDM_OffDiag":0.476837,"LDM_Diag":1.501405,"LDM_Frob":1.575306,"LDM_RMSD":0.262551,"LDM_CT":-11.813889,"Q_Frob":0.256738,"Q_RMSD":0.046874,"S_hom":0.387227},"ringC":{"motif_label":"ELEMENTAIRE (6) [35,36,38,45,42,37]","HOMA":0.884397,"EN":0.030579,"GEO":0.085024,"LDM_OffDiag":0.504212,"LDM_Diag":1.369871,"LDM_Frob":1.459718,"LDM_RMSD":0.243286,"LDM_CT":-10.443889,"Q_Frob":0.28723,"Q_RMSD":0.052441,"S_hom":0.393395},"periphAB":{"motif_label":"PERIPHERAL (10) [1,4,19,21,30,35,36,39,34,28]","HOMA":-147.550804,"EN":29.556201,"GEO":118.994603,"LDM_OffDiag":1.338806,"LDM_Diag":2.11903,"LDM_Frob":2.50653,"LDM_RMSD":0.250653,"LDM_CT":-13.935667,"Q_Frob":0.596318,"Q_RMSD":0.062857,"S_hom":0.13439},"periphBC":{"motif_label":"PERIPHERAL (10) [28,30,35,37,42,45,38,36,39,34]","HOMA":0.902487,"EN":0.012869,"GEO":0.084644,"LDM_OffDiag":0.684649,"LDM_Diag":1.834078,"LDM_Frob":1.9577,"LDM_RMSD":0.19577,"LDM_CT":-7.824667,"Q_Frob":0.437022,"Q_RMSD":0.046066,"S_hom":0.234867},"periphABC":{"motif_label":"PERIPHERAL (14) [1,4,19,21,30,35,37,42,45,38,36,3...]","HOMA":-105.12754,"EN":15.155776,"GEO":90.971765,"LDM_OffDiag":1.421251,"LDM_Diag":2.366414,"LDM_Frob":2.760411,"LDM_RMSD":0.197172,"LDM_CT":-10.470714,"Q_Frob":0.710291,"Q_RMSD":0.05265,"S_hom":0.11046},"_global":{"HOMA_TOTAL":-91.878099,"Q_G":0.038514,"S_hom_G":0.066017,"S_G":0.091497},"_nics":{"BqA":{"NICS_iso":-1.8672,"NICS_zz_g":1.0229,"NICS_zz_loc":-2.3874},"BqB":{"NICS_iso":-6.7376,"NICS_zz_g":-15.2764,"NICS_zz_loc":-22.6822}}}},"TS1":{"x":1,"y":17.072,"role":"transition state 1","image":"endo-TS1.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [9,10,14,13,12,11]","HOMA":-80.496051,"EN":23.828661,"GEO":57.667391,"LDM_OffDiag":1.072012,"LDM_Diag":1.902296,"LDM_Frob":2.183561,"LDM_RMSD":0.363927,"LDM_CT":-20.752778,"Q_Frob":0.431211,"Q_RMSD":0.078728,"S_hom":0.210805},"ringB":{"motif_label":"ELEMENTAIRE (6) [3,4,10,9,8,7]","HOMA":0.648235,"EN":0.16297,"GEO":0.188796,"LDM_OffDiag":0.526693,"LDM_Diag":1.539868,"LDM_Frob":1.627452,"LDM_RMSD":0.271242,"LDM_CT":-13.426667,"Q_Frob":0.285718,"Q_RMSD":0.052165,"S_hom":0.3502},"ringC":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.943933,"EN":0.020193,"GEO":0.035873,"LDM_OffDiag":0.483153,"LDM_Diag":1.350091,"LDM_Frob":1.43394,"LDM_RMSD":0.23899,"LDM_CT":-9.984722,"Q_Frob":0.270389,"Q_RMSD":0.049366,"S_hom":0.412314},"periphAB":{"motif_label":"PERIPHERAL (10) [3,4,10,14,13,12,11,9,8,7]","HOMA":-48.078076,"EN":9.565689,"GEO":39.512387,"LDM_OffDiag":1.091016,"LDM_Diag":2.22426,"LDM_Frob":2.477428,"LDM_RMSD":0.247743,"LDM_CT":-14.818167,"Q_Frob":0.511362,"Q_RMSD":0.053902,"S_hom":0.152969},"periphBC":{"motif_label":"PERIPHERAL (10) [1,2,3,7,8,9,10,4,5,6]","HOMA":0.789501,"EN":0.059914,"GEO":0.150585,"LDM_OffDiag":0.680014,"LDM_Diag":1.856756,"LDM_Frob":1.977362,"LDM_RMSD":0.197736,"LDM_CT":-8.6675,"Q_Frob":0.429326,"Q_RMSD":0.045255,"S_hom":0.221544},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,7,8,9,11,12,13,14,10,4,5,6]","HOMA":-34.055368,"EN":4.888525,"GEO":30.166843,"LDM_OffDiag":1.185939,"LDM_Diag":2.454319,"LDM_Frob":2.725827,"LDM_RMSD":0.194702,"LDM_CT":-10.975,"Q_Frob":0.623749,"Q_RMSD":0.046235,"S_hom":0.121764},"_global":{"HOMA_TOTAL":-29.693702,"Q_G":0.037911,"S_hom_G":0.067584,"S_G":0.093925},"_nics":{"BqA":{"NICS_iso":-2.2979,"NICS_zz_g":-1.2064,"NICS_zz_loc":-2.7405},"BqB":{"NICS_iso":-3.6097,"NICS_zz_g":-4.5245,"NICS_zz_loc":-13.0297}}}},"PA":{"x":2,"y":7.601,"role":"post-addition intermediate","image":"endo-PA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,4,19,21,30,28]","HOMA":-52.8666,"EN":14.269727,"GEO":39.596873,"LDM_OffDiag":0.9441,"LDM_Diag":2.005465,"LDM_Frob":2.216577,"LDM_RMSD":0.369429,"LDM_CT":-21.697778,"Q_Frob":0.372079,"Q_RMSD":0.067932,"S_hom":0.215695},"ringB":{"motif_label":"ELEMENTAIRE (6) [28,30,35,36,39,34]","HOMA":0.050504,"EN":0.473803,"GEO":0.475692,"LDM_OffDiag":0.61329,"LDM_Diag":1.565644,"LDM_Frob":1.681477,"LDM_RMSD":0.280246,"LDM_CT":-14.5175,"Q_Frob":0.356183,"Q_RMSD":0.06503,"S_hom":0.321571},"ringC":{"motif_label":"ELEMENTAIRE (6) [35,36,38,45,42,37]","HOMA":0.959015,"EN":0.018255,"GEO":0.02273,"LDM_OffDiag":0.47731,"LDM_Diag":1.333617,"LDM_Frob":1.41646,"LDM_RMSD":0.236077,"LDM_CT":-9.771667,"Q_Frob":0.265892,"Q_RMSD":0.048545,"S_hom":0.420765},"periphAB":{"motif_label":"PERIPHERAL (10) [1,4,19,21,30,35,36,39,34,28]","HOMA":-31.51589,"EN":5.78935,"GEO":26.726539,"LDM_OffDiag":0.993899,"LDM_Diag":2.298293,"LDM_Frob":2.503994,"LDM_RMSD":0.250399,"LDM_CT":-15.546833,"Q_Frob":0.484254,"Q_RMSD":0.051045,"S_hom":0.15318},"periphBC":{"motif_label":"PERIPHERAL (10) [28,30,35,37,42,45,38,36,39,34]","HOMA":0.439265,"EN":0.169867,"GEO":0.390868,"LDM_OffDiag":0.72841,"LDM_Diag":1.871376,"LDM_Frob":2.008141,"LDM_RMSD":0.200814,"LDM_CT":-9.246333,"Q_Frob":0.46875,"Q_RMSD":0.049411,"S_hom":0.210161},"periphABC":{"motif_label":"PERIPHERAL (14) [1,4,19,21,30,35,37,42,45,38,36,3...]","HOMA":-22.219234,"EN":2.95166,"GEO":20.267574,"LDM_OffDiag":1.095387,"LDM_Diag":2.516537,"LDM_Frob":2.7446,"LDM_RMSD":0.196043,"LDM_CT":-11.458333,"Q_Frob":0.594871,"Q_RMSD":0.044095,"S_hom":0.121791},"_global":{"HOMA_TOTAL":-19.444118,"Q_G":0.037719,"S_hom_G":0.069244,"S_G":0.09335},"_nics":{"BqA":{"NICS_iso":-2.7084,"NICS_zz_g":-3.4795,"NICS_zz_loc":-4.1241},"BqB":{"NICS_iso":-0.8675,"NICS_zz_g":-4.2429,"NICS_zz_loc":-5.2828}}}},"TS2":{"x":3,"y":9.046,"role":"transition state 2","image":"endo-TS2.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-22.689445,"EN":7.665878,"GEO":16.023567,"LDM_OffDiag":0.836315,"LDM_Diag":1.972838,"LDM_Frob":2.142782,"LDM_RMSD":0.35713,"LDM_CT":-20.960278,"Q_Frob":0.380497,"Q_RMSD":0.069469,"S_hom":0.246784},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":-0.057717,"EN":0.52599,"GEO":0.531727,"LDM_OffDiag":0.621875,"LDM_Diag":1.544505,"LDM_Frob":1.664999,"LDM_RMSD":0.2775,"LDM_CT":-14.528056,"Q_Frob":0.362435,"Q_RMSD":0.066171,"S_hom":0.318646},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.967446,"EN":0.014331,"GEO":0.018224,"LDM_OffDiag":0.476954,"LDM_Diag":1.341954,"LDM_Frob":1.424193,"LDM_RMSD":0.237365,"LDM_CT":-9.771389,"Q_Frob":0.266756,"Q_RMSD":0.048703,"S_hom":0.422946},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-13.399814,"EN":3.228837,"GEO":11.170977,"LDM_OffDiag":0.904376,"LDM_Diag":2.272032,"LDM_Frob":2.445409,"LDM_RMSD":0.244541,"LDM_CT":-15.139167,"Q_Frob":0.490962,"Q_RMSD":0.051752,"S_hom":0.165473},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.373647,"EN":0.186969,"GEO":0.439384,"LDM_OffDiag":0.734001,"LDM_Diag":1.857491,"LDM_Frob":1.997256,"LDM_RMSD":0.199726,"LDM_CT":-9.259667,"Q_Frob":0.47325,"Q_RMSD":0.049885,"S_hom":0.208898},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-9.279669,"EN":1.642324,"GEO":8.637346,"LDM_OffDiag":1.017796,"LDM_Diag":2.495378,"LDM_Frob":2.694962,"LDM_RMSD":0.192497,"LDM_CT":-11.156667,"Q_Frob":0.599609,"Q_RMSD":0.044446,"S_hom":0.12918},"_global":{"HOMA_TOTAL":-8.143552,"Q_G":0.03778,"S_hom_G":0.068377,"S_G":0.094161},"_nics":{"BqA":{"NICS_iso":-3.1444,"NICS_zz_g":-2.9016,"NICS_zz_loc":-6.0765},"BqB":{"NICS_iso":-0.5471,"NICS_zz_g":-3.7026,"NICS_zz_loc":-4.3234}}}},"CA":{"x":4,"y":-11.103,"role":"cycloadduct (product)","image":"endo-CA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":-1.425336,"EN":1.626127,"GEO":0.799209,"LDM_OffDiag":0.655974,"LDM_Diag":1.903214,"LDM_Frob":2.013089,"LDM_RMSD":0.335515,"LDM_CT":-19.019722,"Q_Frob":0.370319,"Q_RMSD":0.067611,"S_hom":0.28827},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,6,7,8,9,10]","HOMA":-0.567253,"EN":0.793005,"GEO":0.774248,"LDM_OffDiag":0.65246,"LDM_Diag":1.526783,"LDM_Frob":1.660353,"LDM_RMSD":0.276725,"LDM_CT":-14.948056,"Q_Frob":0.385878,"Q_RMSD":0.070451,"S_hom":0.308196},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.992302,"EN":0.003609,"GEO":0.004089,"LDM_OffDiag":0.485161,"LDM_Diag":1.357484,"LDM_Frob":1.441577,"LDM_RMSD":0.240263,"LDM_CT":-9.5525,"Q_Frob":0.278794,"Q_RMSD":0.050901,"S_hom":0.429507},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,3,4,5,6,7,8,9,10]","HOMA":-0.731237,"EN":0.874073,"GEO":0.857164,"LDM_OffDiag":0.774511,"LDM_Diag":2.219731,"LDM_Frob":2.350972,"LDM_RMSD":0.235097,"LDM_CT":-14.307,"Q_Frob":0.495441,"Q_RMSD":0.052224,"S_hom":0.17807},"periphBC":{"motif_label":"PERIPHERAL (10) [1,6,7,8,9,14,13,12,11,10]","HOMA":0.062154,"EN":0.283664,"GEO":0.654181,"LDM_OffDiag":0.762435,"LDM_Diag":1.847477,"LDM_Frob":1.998619,"LDM_RMSD":0.199862,"LDM_CT":-9.404667,"Q_Frob":0.494161,"Q_RMSD":0.052089,"S_hom":0.204994},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,4,5,6,7,8,9,14,13,12,11,10]","HOMA":-0.234808,"EN":0.444332,"GEO":0.790476,"LDM_OffDiag":0.920623,"LDM_Diag":2.451389,"LDM_Frob":2.61856,"LDM_RMSD":0.18704,"LDM_CT":-10.502262,"Q_Frob":0.61123,"Q_RMSD":0.045307,"S_hom":0.136451},"_global":{"HOMA_TOTAL":-0.290282,"Q_G":0.038202,"S_hom_G":0.066643,"S_G":0.093056},"_nics":{"BqA":{"NICS_iso":-4.2921,"NICS_zz_g":-0.1281,"NICS_zz_loc":-4.4005},"BqB":{"NICS_iso":-0.4162,"NICS_zz_g":-2.5788,"NICS_zz_loc":-3.2958}}}}},"barrier1_kcal":17.072,"barrier2_kcal":1.4449999999999994,"delta_E_kcal":-11.103},"exo":{"profile":[{"x":0,"y":0},{"x":1,"y":17.313},{"x":2,"y":8.321},{"x":3,"y":12.265},{"x":4,"y":-5.919}],"arox":{"PC":{"x":0,"y":0,"role":"pre-complex (reference, dE=0)","image":"reactif.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [9,10,17,16,15,14]","HOMA":-314.18523,"EN":102.909697,"GEO":212.275533,"LDM_OffDiag":1.345766,"LDM_Diag":1.774502,"LDM_Frob":2.227093,"LDM_RMSD":0.371182,"LDM_CT":-19.893611,"Q_Frob":0.500234,"Q_RMSD":0.09133,"S_hom":0.165606},"ringB":{"motif_label":"ELEMENTAIRE (6) [2,3,7,8,9,10]","HOMA":0.879537,"EN":0.02922,"GEO":0.091243,"LDM_OffDiag":0.481724,"LDM_Diag":1.48677,"LDM_Frob":1.562863,"LDM_RMSD":0.260477,"LDM_CT":-11.619722,"Q_Frob":0.262026,"Q_RMSD":0.047839,"S_hom":0.388213},"ringC":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.884114,"EN":0.030009,"GEO":0.085877,"LDM_OffDiag":0.505294,"LDM_Diag":1.368014,"LDM_Frob":1.458349,"LDM_RMSD":0.243058,"LDM_CT":-10.380278,"Q_Frob":0.288622,"Q_RMSD":0.052695,"S_hom":0.394627},"periphAB":{"motif_label":"PERIPHERAL (10) [2,3,7,8,9,14,15,16,17,10]","HOMA":-188.172097,"EN":38.897742,"GEO":150.274355,"LDM_OffDiag":1.348383,"LDM_Diag":2.114013,"LDM_Frob":2.507426,"LDM_RMSD":0.250743,"LDM_CT":-13.9755,"Q_Frob":0.581096,"Q_RMSD":0.061253,"S_hom":0.132019},"periphBC":{"motif_label":"PERIPHERAL (10) [1,2,10,9,8,7,3,4,5,6]","HOMA":0.901736,"EN":0.01281,"GEO":0.085455,"LDM_OffDiag":0.691216,"LDM_Diag":1.822803,"LDM_Frob":1.949459,"LDM_RMSD":0.194946,"LDM_CT":-7.673833,"Q_Frob":0.442697,"Q_RMSD":0.046664,"S_hom":0.23578},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,10,17,16,15,14,9,8,7,3,4,5,6]","HOMA":-134.141489,"EN":19.913412,"GEO":115.228076,"LDM_OffDiag":1.429579,"LDM_Diag":2.362452,"LDM_Frob":2.761317,"LDM_RMSD":0.197237,"LDM_CT":-10.419881,"Q_Frob":0.700313,"Q_RMSD":0.051911,"S_hom":0.110094},"_global":{"HOMA_TOTAL":-117.265947,"Q_G":0.038534,"S_hom_G":0.066105,"S_G":0.091358},"_nics":{"BqA":{"NICS_iso":-2.2398,"NICS_zz_g":-4.3413,"NICS_zz_loc":1.5617},"BqB":{"NICS_iso":-6.7109,"NICS_zz_g":-11.3119,"NICS_zz_loc":-22.3597}}}},"TS1":{"x":1,"y":17.313,"role":"transition state 1","image":"exo-TS1.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [9,10,17,16,15,14]","HOMA":-75.523568,"EN":22.402558,"GEO":54.12101,"LDM_OffDiag":1.056656,"LDM_Diag":1.909389,"LDM_Frob":2.182266,"LDM_RMSD":0.363711,"LDM_CT":-20.848889,"Q_Frob":0.426289,"Q_RMSD":0.077829,"S_hom":0.211083},"ringB":{"motif_label":"ELEMENTAIRE (6) [2,3,7,8,9,10]","HOMA":0.62586,"EN":0.174727,"GEO":0.199413,"LDM_OffDiag":0.533269,"LDM_Diag":1.523834,"LDM_Frob":1.614449,"LDM_RMSD":0.269075,"LDM_CT":-13.297778,"Q_Frob":0.293008,"Q_RMSD":0.053496,"S_hom":0.349521},"ringC":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":0.941169,"EN":0.021518,"GEO":0.037313,"LDM_OffDiag":0.485422,"LDM_Diag":1.334936,"LDM_Frob":1.420453,"LDM_RMSD":0.236742,"LDM_CT":-9.834722,"Q_Frob":0.27277,"Q_RMSD":0.049801,"S_hom":0.413314},"periphAB":{"motif_label":"PERIPHERAL (10) [2,3,7,8,9,14,15,16,17,10]","HOMA":-45.104641,"EN":9.049505,"GEO":37.055135,"LDM_OffDiag":1.079705,"LDM_Diag":2.218609,"LDM_Frob":2.467385,"LDM_RMSD":0.246739,"LDM_CT":-14.8095,"Q_Frob":0.509046,"Q_RMSD":0.053658,"S_hom":0.15238},"periphBC":{"motif_label":"PERIPHERAL (10) [1,2,10,9,8,7,3,4,5,6]","HOMA":0.77752,"EN":0.063726,"GEO":0.158753,"LDM_OffDiag":0.687922,"LDM_Diag":1.838533,"LDM_Frob":1.963018,"LDM_RMSD":0.196302,"LDM_CT":-8.523667,"Q_Frob":0.436502,"Q_RMSD":0.046011,"S_hom":0.221643},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,10,17,16,15,14,9,8,7,3,4,5,6]","HOMA":-31.930454,"EN":4.622126,"GEO":28.308328,"LDM_OffDiag":1.17708,"LDM_Diag":2.445477,"LDM_Frob":2.714015,"LDM_RMSD":0.193858,"LDM_CT":-10.9275,"Q_Frob":0.623523,"Q_RMSD":0.046219,"S_hom":0.121745},"_global":{"HOMA_TOTAL":-27.836425,"Q_G":0.037939,"S_hom_G":0.067445,"S_G":0.093829},"_nics":{"BqA":{"NICS_iso":-4.1651,"NICS_zz_g":-2.4012,"NICS_zz_loc":-3.346},"BqB":{"NICS_iso":-3.921,"NICS_zz_g":-10.2478,"NICS_zz_loc":-13.0677}}}},"PA":{"x":2,"y":8.321,"role":"post-addition intermediate","image":"exo-PA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-68.863782,"EN":17.616233,"GEO":52.247549,"LDM_OffDiag":0.965466,"LDM_Diag":2.034953,"LDM_Frob":2.252367,"LDM_RMSD":0.375395,"LDM_CT":-22.076944,"Q_Frob":0.36903,"Q_RMSD":0.067375,"S_hom":0.208155},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":0.052115,"EN":0.473352,"GEO":0.474532,"LDM_OffDiag":0.61972,"LDM_Diag":1.568458,"LDM_Frob":1.68645,"LDM_RMSD":0.281075,"LDM_CT":-14.473611,"Q_Frob":0.362479,"Q_RMSD":0.066179,"S_hom":0.320861},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.962307,"EN":0.016668,"GEO":0.021025,"LDM_OffDiag":0.482464,"LDM_Diag":1.320752,"LDM_Frob":1.406115,"LDM_RMSD":0.234352,"LDM_CT":-9.575,"Q_Frob":0.271439,"Q_RMSD":0.049558,"S_hom":0.422596},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-41.118944,"EN":7.074492,"GEO":35.044453,"LDM_OffDiag":1.017141,"LDM_Diag":2.316379,"LDM_Frob":2.52986,"LDM_RMSD":0.252986,"LDM_CT":-15.748833,"Q_Frob":0.485635,"Q_RMSD":0.05119,"S_hom":0.148922},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.440406,"EN":0.168573,"GEO":0.391021,"LDM_OffDiag":0.739385,"LDM_Diag":1.868786,"LDM_Frob":2.009739,"LDM_RMSD":0.200974,"LDM_CT":-9.132167,"Q_Frob":0.477855,"Q_RMSD":0.05037,"S_hom":0.210152},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-29.078434,"EN":3.603391,"GEO":26.475043,"LDM_OffDiag":1.1194,"LDM_Diag":2.529409,"LDM_Frob":2.766038,"LDM_RMSD":0.197574,"LDM_CT":-11.547976,"Q_Frob":0.600621,"Q_RMSD":0.044521,"S_hom":0.11964},"_global":{"HOMA_TOTAL":-25.44357,"Q_G":0.037707,"S_hom_G":0.068941,"S_G":0.093129},"_nics":{"BqA":{"NICS_iso":-3.23,"NICS_zz_g":-1.2846,"NICS_zz_loc":-3.3394},"BqB":{"NICS_iso":-1.1177,"NICS_zz_g":-2.6132,"NICS_zz_loc":-4.8794}}}},"TS2":{"x":3,"y":12.265,"role":"transition state 2","image":"exo-TS2.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,6,5,4,3]","HOMA":-18.453985,"EN":6.691914,"GEO":12.762071,"LDM_OffDiag":0.806118,"LDM_Diag":1.981876,"LDM_Frob":2.139547,"LDM_RMSD":0.356591,"LDM_CT":-20.929444,"Q_Frob":0.375457,"Q_RMSD":0.068549,"S_hom":0.253141},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,3,7,8,9,10]","HOMA":-0.09183,"EN":0.540506,"GEO":0.551324,"LDM_OffDiag":0.629824,"LDM_Diag":1.53668,"LDM_Frob":1.660741,"LDM_RMSD":0.27679,"LDM_CT":-14.436667,"Q_Frob":0.369919,"Q_RMSD":0.067538,"S_hom":0.317923},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,11,12,13,14]","HOMA":0.972779,"EN":0.012002,"GEO":0.01522,"LDM_OffDiag":0.481021,"LDM_Diag":1.342409,"LDM_Frob":1.425988,"LDM_RMSD":0.237665,"LDM_CT":-9.656667,"Q_Frob":0.271721,"Q_RMSD":0.049609,"S_hom":0.425499},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,6,5,4,3,7,8,9,10]","HOMA":-10.862368,"EN":2.850154,"GEO":9.012214,"LDM_OffDiag":0.885691,"LDM_Diag":2.274976,"LDM_Frob":2.441304,"LDM_RMSD":0.24413,"LDM_CT":-15.112,"Q_Frob":0.490843,"Q_RMSD":0.051739,"S_hom":0.16683},"periphBC":{"motif_label":"PERIPHERAL (10) [1,3,7,8,9,14,13,12,11,10]","HOMA":0.351086,"EN":0.19337,"GEO":0.455543,"LDM_OffDiag":0.744983,"LDM_Diag":1.852484,"LDM_Frob":1.996672,"LDM_RMSD":0.199667,"LDM_CT":-9.166,"Q_Frob":0.482451,"Q_RMSD":0.050855,"S_hom":0.208764},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,6,5,4,3,7,8,9,14,13,12,11,10]","HOMA":-7.468703,"EN":1.451791,"GEO":7.016911,"LDM_OffDiag":1.004384,"LDM_Diag":2.499166,"LDM_Frob":2.693439,"LDM_RMSD":0.192389,"LDM_CT":-11.112143,"Q_Frob":0.60278,"Q_RMSD":0.044681,"S_hom":0.130223},"_global":{"HOMA_TOTAL":-6.562502,"Q_G":0.037816,"S_hom_G":0.067969,"S_G":0.094105},"_nics":{"BqA":{"NICS_iso":-2.8928,"NICS_zz_g":-3.9625,"NICS_zz_loc":-5.9353},"BqB":{"NICS_iso":-0.7849,"NICS_zz_g":-2.4618,"NICS_zz_loc":-3.7724}}}},"CA":{"x":4,"y":-5.919,"role":"cycloadduct (product)","image":"exo-CA.JPG","desc":{"ringA":{"motif_label":"ELEMENTAIRE (6) [1,2,3,4,5,6]","HOMA":-1.844188,"EN":1.876611,"GEO":0.967577,"LDM_OffDiag":0.665711,"LDM_Diag":1.890483,"LDM_Frob":2.004269,"LDM_RMSD":0.334045,"LDM_CT":-18.877778,"Q_Frob":0.382608,"Q_RMSD":0.069854,"S_hom":0.288665},"ringB":{"motif_label":"ELEMENTAIRE (6) [1,6,7,8,9,10]","HOMA":-0.51276,"EN":0.744364,"GEO":0.768396,"LDM_OffDiag":0.652594,"LDM_Diag":1.502317,"LDM_Frob":1.637937,"LDM_RMSD":0.272989,"LDM_CT":-14.542778,"Q_Frob":0.386692,"Q_RMSD":0.0706,"S_hom":0.3115},"ringC":{"motif_label":"ELEMENTAIRE (6) [9,10,14,13,12,11]","HOMA":0.991532,"EN":0.004381,"GEO":0.004087,"LDM_OffDiag":0.483949,"LDM_Diag":1.350196,"LDM_Frob":1.434307,"LDM_RMSD":0.239051,"LDM_CT":-9.531944,"Q_Frob":0.277324,"Q_RMSD":0.050632,"S_hom":0.42953},"periphAB":{"motif_label":"PERIPHERAL (10) [1,2,3,4,5,6,7,8,9,10]","HOMA":-0.921366,"EN":0.935783,"GEO":0.985583,"LDM_OffDiag":0.789024,"LDM_Diag":2.19648,"LDM_Frob":2.333899,"LDM_RMSD":0.23339,"LDM_CT":-13.971,"Q_Frob":0.508381,"Q_RMSD":0.053588,"S_hom":0.180063},"periphBC":{"motif_label":"PERIPHERAL (10) [1,6,7,8,9,11,12,13,14,10]","HOMA":0.09325,"EN":0.27329,"GEO":0.633461,"LDM_OffDiag":0.762573,"LDM_Diag":1.828475,"LDM_Frob":1.981121,"LDM_RMSD":0.198112,"LDM_CT":-9.2065,"Q_Frob":0.495123,"Q_RMSD":0.052191,"S_hom":0.206101},"periphABC":{"motif_label":"PERIPHERAL (14) [1,2,3,4,5,6,7,8,9,11,12,13,14,10]","HOMA":-0.371757,"EN":0.4825,"GEO":0.889258,"LDM_OffDiag":0.931108,"LDM_Diag":2.431232,"LDM_Frob":2.603431,"LDM_RMSD":0.185959,"LDM_CT":-10.285833,"Q_Frob":0.620784,"Q_RMSD":0.046016,"S_hom":0.137534},"_global":{"HOMA_TOTAL":-0.418659,"Q_G":0.038193,"S_hom_G":0.066694,"S_G":0.093018},"_nics":{"BqA":{"NICS_iso":-1.8065,"NICS_zz_g":-2.6123,"NICS_zz_loc":-2.8339},"BqB":{"NICS_iso":-1.8472,"NICS_zz_g":1.6414,"NICS_zz_loc":-2.5267}}}}},"barrier1_kcal":17.313,"barrier2_kcal":3.944000000000001,"delta_E_kcal":-5.919}};
 
 const STEREOS = ['endo', 'exo'];
 const MOTIFS  = ['ringA', 'ringB', 'ringC', 'periphAB', 'periphBC', 'periphABC'];
@@ -287,6 +296,10 @@ const STATE_ORDER  = ['PC', 'TS1', 'PA', 'TS2', 'CA'];
 const STATE_LABEL  = { PC: 'PC', TS1: 'TS1', PA: 'PA', TS2: 'TS2', CA: 'CA' };
 const STATE_ROLE   = { PC:'pré-complexe (réf)', TS1:'transition state 1', PA:'intermédiaire', TS2:'transition state 2', CA:'cycloadduit' };
 
+const NICS_BQ = ['BqA', 'BqB'];
+const NICS_BQ_LABEL = { BqA: 'BqA (cycle A en formation)', BqB: 'BqB (cycle B)' };
+const NICS_BQ_MOTIF = { BqA: 'ringA', BqB: 'ringB' };
+
 const DESCRIPTORS = [
   { key:'HOMA',        label:'HOMA',          family:'HOMA',  perMotif:true,  hasDecomp:true },
   { key:'LDM_OffDiag', label:'LDM Off Diag.', family:'LDM',   perMotif:true },
@@ -301,6 +314,9 @@ const DESCRIPTORS = [
   { key:'Q_G',         label:'Q(G)',          family:'global', perMotif:false },
   { key:'S_hom_G',     label:'S-hom(G)',      family:'global', perMotif:false },
   { key:'S_G',         label:'S(G)',          family:'global', perMotif:false },
+  { key:'NICS_iso',    label:'NICS iso',         family:'NICS', perMotif:false, perNicsBq:true },
+  { key:'NICS_zz_g',   label:'NICS zz global',   family:'NICS', perMotif:false, perNicsBq:true },
+  { key:'NICS_zz_loc', label:'NICS zz local',    family:'NICS', perMotif:false, perNicsBq:true },
 ];
 const DESC_BY_KEY = Object.fromEntries(DESCRIPTORS.map(d => [d.key, d]));
 
@@ -312,6 +328,7 @@ const HOMA_DECOMP = ['HOMA', 'EN', 'GEO'];
 const state = {
   stereos: new Set(['endo', 'exo']),
   motifs:  new Set(MOTIFS),
+  nicsBq:  new Set(NICS_BQ),
   descriptor: null,
   homaSubs: new Set(['HOMA']),
   clipHoma: false,
@@ -431,6 +448,34 @@ function buildDatasets() {
               meta_kind:'desc', meta_stereo: stereo, meta_motif: motif, meta_comp: comp,
             });
           }
+        }
+      }
+    } else if (desc.perNicsBq) {
+      // Descripteur NICS par Bq : une courbe par (stereo x Bq actif)
+      for (const stereo of STEREOS) {
+        if (!state.stereos.has(stereo)) continue;
+        const pointStyle = stereo === 'endo' ? 'circle' : 'triangle';
+        for (const bq of NICS_BQ) {
+          if (!state.nicsBq.has(bq)) continue;
+          const motif = NICS_BQ_MOTIF[bq];
+          const points = STATE_ORDER.map(st => {
+            const n = DATA[stereo].arox[st].desc._nics || {};
+            const v = (n[bq] || {})[dkey];
+            return { x: DATA[stereo].arox[st].x, y: clipIfHoma(v), rawY: v };
+          });
+          ds.push({
+            type:'line',
+            label: `${NICS_BQ_LABEL[bq]} · ${STEREO_LABEL[stereo]}`,
+            data: points,
+            yAxisID:'y1',
+            borderColor: c(motifColor[motif]),
+            backgroundColor: c(motifColor[motif]),
+            borderWidth: 2,
+            borderDash: bq === 'BqB' ? [2, 3] : [],
+            tension: 0.2, pointRadius: 5, pointHoverRadius: 7,
+            pointStyle: pointStyle, fill: false, spanGaps: true,
+            meta_kind:'desc_nics', meta_stereo: stereo, meta_bq: bq,
+          });
         }
       }
     } else {
@@ -606,14 +651,15 @@ function renderToolbar() {
     b.textContent = d.label;
     b.onclick = () => {
       state.descriptor = (state.descriptor === d.key) ? null : d.key;
-      renderToolbar(); renderHomaSubRow(); render();
+      renderToolbar(); renderHomaSubRow(); renderNicsSubRow(); render();
     };
     dRow.appendChild(b);
     lastFamily = d.family;
   }
 
-  // HOMA sub-row
+  // HOMA / NICS sub-rows
   renderHomaSubRow();
+  renderNicsSubRow();
   // Clip button
   document.getElementById('btn-clip').setAttribute('aria-pressed', state.clipHoma ? 'true' : 'false');
 }
@@ -633,6 +679,31 @@ function renderHomaSubRow() {
         if (state.homaSubs.size > 1) state.homaSubs.delete(comp);
       } else state.homaSubs.add(comp);
       renderHomaSubRow(); render();
+    };
+    row.appendChild(chip);
+  }
+}
+
+function renderNicsSubRow() {
+  const row = document.getElementById('nics-sub-row');
+  row.querySelectorAll('.chip').forEach(n => n.remove());
+  const d = state.descriptor && DESC_BY_KEY[state.descriptor];
+  if (!d || !d.perNicsBq) { row.hidden = true; return; }
+  row.hidden = false;
+  for (const bq of NICS_BQ) {
+    const chip = document.createElement('button');
+    chip.className = 'chip';
+    chip.setAttribute('aria-pressed', state.nicsBq.has(bq) ? 'true' : 'false');
+    const sw = document.createElement('span');
+    sw.className = 'swatch';
+    sw.style.background = c(motifColor[NICS_BQ_MOTIF[bq]]);
+    chip.appendChild(sw);
+    chip.appendChild(document.createTextNode(NICS_BQ_LABEL[bq]));
+    chip.onclick = () => {
+      if (state.nicsBq.has(bq)) {
+        if (state.nicsBq.size > 1) state.nicsBq.delete(bq);
+      } else state.nicsBq.add(bq);
+      renderNicsSubRow(); render();
     };
     row.appendChild(chip);
   }
@@ -711,6 +782,19 @@ function renderLegend() {
         }
       }
       addSection(desc.label + (isHoma ? ' (HOMA + EN + GEO)' : '') + ' — Y droit', items);
+    } else if (desc.perNicsBq) {
+      const items = [];
+      for (const bq of NICS_BQ) {
+        if (!state.nicsBq.has(bq)) continue;
+        const col = c(motifColor[NICS_BQ_MOTIF[bq]]);
+        const it = document.createElement('span'); it.className = 'legend-item'; it.style.color = col;
+        const ln = document.createElement('span'); ln.className = 'stroke-mini'; ln.style.color = col;
+        ln.style.borderTopStyle = bq === 'BqB' ? 'dotted' : 'solid';
+        it.appendChild(ln);
+        it.appendChild(document.createTextNode(' ' + NICS_BQ_LABEL[bq]));
+        items.push(it);
+      }
+      addSection(desc.label + ' (NICS) — Y droit', items);
     } else {
       const items = [];
       for (const s of STEREOS) {
@@ -769,7 +853,7 @@ function renderInfoPanel() {
   panel.appendChild(img);
 
   // Tabs (HOMA decomp / LDM / Q / S / global)
-  const families = ['HOMA', 'LDM', 'Q', 'S', 'global'];
+  const families = ['HOMA', 'LDM', 'Q', 'S', 'NICS', 'global'];
   const tabsBar = document.createElement('div'); tabsBar.className = 'tabs';
   if (!panel.dataset.activeFamily) panel.dataset.activeFamily = state.descriptor ? (DESC_BY_KEY[state.descriptor].family) : 'HOMA';
   for (const fam of families) {
@@ -790,6 +874,22 @@ function renderInfoPanel() {
       const tr = document.createElement('tr');
       tr.innerHTML = `<td>${DESC_BY_KEY[key].label}</td><td>${fmtAuto(p.desc._global[key])}</td>`;
       if (state.descriptor === key) tr.classList.add('highlight');
+      tb.appendChild(tr);
+    }
+    t.appendChild(tb); panel.appendChild(t);
+  } else if (fam === 'NICS') {
+    const nics = p.desc._nics || {};
+    const t = document.createElement('table');
+    let header = '<thead><tr><th>Bq</th><th>NICS iso</th><th>NICS zz global</th><th>NICS zz local</th></tr></thead>';
+    t.innerHTML = header;
+    const tb = document.createElement('tbody');
+    for (const bq of NICS_BQ) {
+      const n = nics[bq] || {};
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td style="color:${c(motifColor[NICS_BQ_MOTIF[bq]])};font-weight:500">${NICS_BQ_LABEL[bq]}</td>`
+                   + `<td>${fmtAuto(n.NICS_iso)}</td>`
+                   + `<td>${fmtAuto(n.NICS_zz_g)}</td>`
+                   + `<td>${fmtAuto(n.NICS_zz_loc)}</td>`;
       tb.appendChild(tr);
     }
     t.appendChild(tb); panel.appendChild(t);
@@ -889,6 +989,7 @@ function init() {
   document.getElementById('btn-default').onclick = () => {
     state.stereos = new Set(['endo', 'exo']);
     state.motifs  = new Set(MOTIFS);
+    state.nicsBq  = new Set(NICS_BQ);
     state.descriptor = null;
     state.homaSubs = new Set(['HOMA']);
     state.clipHoma = false;
@@ -910,6 +1011,7 @@ function descMeta(key) { return DESC_BY_KEY[key]; }
 const cmpState = {
   stereos: new Set(['endo', 'exo']),
   motifs:  new Set(MOTIFS),
+  nicsBq:  new Set(NICS_BQ),
   descriptors: new Set(['HOMA']),
   showPES: true,
   normalize: true,
@@ -917,7 +1019,8 @@ const cmpState = {
 const gridState = {
   stereos: new Set(['endo', 'exo']),
   motifs:  new Set(MOTIFS),
-  descriptors: new Set(['HOMA', 'HOMA_TOTAL', 'S_hom']),
+  nicsBq:  new Set(NICS_BQ),
+  descriptors: new Set(['HOMA', 'HOMA_TOTAL', 'S_hom', 'NICS_zz_loc']),
   showPES: true,
   separateByCycle: false,
 };
@@ -934,6 +1037,14 @@ function panelValueAt(panelState, descKey, stereo, pointKey) {
     const vals = [];
     panelState.motifs.forEach(m => {
       const v = arox.desc[m] && arox.desc[m][descKey];
+      if (Number.isFinite(v)) vals.push(v);
+    });
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  }
+  if (d.perNicsBq) {
+    const vals = [];
+    panelState.nicsBq.forEach(bq => {
+      const v = arox.desc._nics && arox.desc._nics[bq] && arox.desc._nics[bq][descKey];
       if (Number.isFinite(v)) vals.push(v);
     });
     return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
@@ -1041,6 +1152,17 @@ function cmpBuildToolbar() {
       cmpRender();
     },
     k => c(motifColor[k]));
+
+  buildChipRow(document.getElementById('cmp-nicsbq-row'),
+    NICS_BQ.map(b => ({ key:b, label:NICS_BQ_LABEL[b] })),
+    k => cmpState.nicsBq.has(k),
+    (k, btn) => {
+      if (cmpState.nicsBq.has(k)) cmpState.nicsBq.delete(k);
+      else cmpState.nicsBq.add(k);
+      btn.setAttribute('aria-pressed', cmpState.nicsBq.has(k));
+      cmpRender();
+    },
+    k => c(motifColor[NICS_BQ_MOTIF[k]]));
 
   buildDescriptorRow(document.getElementById('cmp-desc-row'), cmpState, cmpRender, 'desc');
 
@@ -1265,6 +1387,17 @@ function gridBuildToolbar() {
     },
     k => c(motifColor[k]));
 
+  buildChipRow(document.getElementById('grid-nicsbq-row'),
+    NICS_BQ.map(b => ({ key:b, label:NICS_BQ_LABEL[b] })),
+    k => gridState.nicsBq.has(k),
+    (k, btn) => {
+      if (gridState.nicsBq.has(k)) gridState.nicsBq.delete(k);
+      else gridState.nicsBq.add(k);
+      btn.setAttribute('aria-pressed', gridState.nicsBq.has(k));
+      gridRender();
+    },
+    k => c(motifColor[NICS_BQ_MOTIF[k]]));
+
   buildDescriptorRow(document.getElementById('grid-desc-row'), gridState, gridRender, 'gridDesc');
 
   document.getElementById('grid-separate').addEventListener('click', e => {
@@ -1303,28 +1436,39 @@ function gridRender() {
 
   const cardSpecs = [];
   const activeMotifs = MOTIFS.filter(m => gridState.motifs.has(m));
+  const activeBq     = NICS_BQ.filter(b => gridState.nicsBq.has(b));
   activeKeys.forEach(descKey => {
     const d = descMeta(descKey);
     if (!d) return;
     if (gridState.separateByCycle && d.perMotif) {
-      activeMotifs.forEach(m => cardSpecs.push({ descKey, d, splitMotif: m }));
+      activeMotifs.forEach(m => cardSpecs.push({ descKey, d, splitMotif: m, splitBq: null }));
+    } else if (gridState.separateByCycle && d.perNicsBq) {
+      activeBq.forEach(b => cardSpecs.push({ descKey, d, splitMotif: null, splitBq: b }));
     } else {
-      cardSpecs.push({ descKey, d, splitMotif: null });
+      cardSpecs.push({ descKey, d, splitMotif: null, splitBq: null });
     }
   });
 
   cardSpecs.forEach((spec, idx) => {
-    const { descKey, d, splitMotif } = spec;
+    const { descKey, d, splitMotif, splitBq } = spec;
     const card = document.createElement('div');
     card.className = 'grid-card';
-    const splitColor = splitMotif ? c(motifColor[splitMotif]) : null;
+    const splitColor = splitMotif ? c(motifColor[splitMotif])
+                                  : splitBq ? c(motifColor[NICS_BQ_MOTIF[splitBq]])
+                                  : null;
     const titleColor = splitColor || cmpColor(idx);
-    const splitSuffix = splitMotif ? ' <span style="color:var(--muted);font-weight:400;font-size:0.85em">— ' + MOTIF_LABEL[splitMotif] + '</span>' : '';
-    const familyExtra = splitMotif ? ' · ' + MOTIF_LABEL[splitMotif] : (d.perMotif ? ' · moy. motifs actifs' : '');
+    const splitSuffix = splitMotif ? ' <span style="color:var(--muted);font-weight:400;font-size:0.85em">— ' + MOTIF_LABEL[splitMotif] + '</span>'
+                                   : splitBq ? ' <span style="color:var(--muted);font-weight:400;font-size:0.85em">— ' + NICS_BQ_LABEL[splitBq] + '</span>'
+                                   : '';
+    const subKind = d.perMotif ? 'per-motif' : (d.perNicsBq ? 'per-Bq' : 'global');
+    const familyExtra = splitMotif ? ' · ' + MOTIF_LABEL[splitMotif]
+                                   : splitBq ? ' · ' + NICS_BQ_LABEL[splitBq]
+                                   : (d.perMotif ? ' · moy. motifs actifs'
+                                                 : (d.perNicsBq ? ' · moy. Bq actifs' : ''));
     card.innerHTML =
       '<div class="grid-card-title">' +
         '<span style="color:' + titleColor + '">' + d.label + splitSuffix + '</span>' +
-        '<span class="grid-card-family">' + d.family + (d.perMotif ? ' · per-motif' : ' · global') + familyExtra + '</span>' +
+        '<span class="grid-card-family">' + d.family + ' · ' + subKind + familyExtra + '</span>' +
       '</div>' +
       '<div class="grid-card-canvas-wrap"><canvas id="grid-chart-' + idx + '"></canvas></div>';
     root.appendChild(card);
@@ -1342,7 +1486,12 @@ function gridRender() {
         });
       });
     }
-    const lookupState = splitMotif ? Object.assign({}, gridState, { motifs: new Set([splitMotif]) }) : gridState;
+    const lookupState = (splitMotif || splitBq)
+      ? Object.assign({}, gridState, {
+          motifs: splitMotif ? new Set([splitMotif]) : gridState.motifs,
+          nicsBq: splitBq    ? new Set([splitBq])    : gridState.nicsBq,
+        })
+      : gridState;
     gridState.stereos.forEach(stereo => {
       const stereoCol = c(stereoColor[stereo]);
       const xs = POINT_ORDER.map(p => DATA[stereo].arox[p].x);
@@ -1360,7 +1509,9 @@ function gridRender() {
     });
 
     const ctx = document.getElementById('grid-chart-' + idx).getContext('2d');
-    const chartKey = splitMotif ? descKey + '__m_' + splitMotif : descKey;
+    const chartKey = splitMotif ? descKey + '__m_' + splitMotif
+                                : splitBq ? descKey + '__b_' + splitBq
+                                : descKey;
     gridCharts[chartKey] = new Chart(ctx, {
       type: 'line',
       data: { datasets },
@@ -1412,17 +1563,26 @@ async function gridDownload() {
   let idx = 0;
   for (const [chartKey, ch] of Object.entries(gridCharts)) {
     if (!ch) { idx++; continue; }
-    let descKey = chartKey, splitMotif = null;
+    let descKey = chartKey, splitMotif = null, splitBq = null;
     const im = chartKey.indexOf('__m_');
+    const ib = chartKey.indexOf('__b_');
     if (im >= 0) { descKey = chartKey.slice(0, im); splitMotif = chartKey.slice(im + 4); }
+    else if (ib >= 0) { descKey = chartKey.slice(0, ib); splitBq = chartKey.slice(ib + 4); }
     const d = descMeta(descKey);
     if (!d) { idx++; continue; }
     const img = await new Promise(r => { const i = new Image(); i.onload = () => r(i); i.src = ch.toBase64Image('image/png', 1); });
-    const label = splitMotif ? d.label + ' — ' + MOTIF_LABEL[splitMotif] : d.label;
-    const familyExtra = splitMotif ? ' · ' + MOTIF_LABEL[splitMotif] : '';
-    const color = splitMotif ? c(motifColor[splitMotif]) : cmpColor(idx);
+    const label = splitMotif ? d.label + ' — ' + MOTIF_LABEL[splitMotif]
+                            : splitBq ? d.label + ' — ' + NICS_BQ_LABEL[splitBq]
+                            : d.label;
+    const familyExtra = splitMotif ? ' · ' + MOTIF_LABEL[splitMotif]
+                                   : splitBq ? ' · ' + NICS_BQ_LABEL[splitBq]
+                                   : '';
+    const color = splitMotif ? c(motifColor[splitMotif])
+                            : splitBq ? c(motifColor[NICS_BQ_MOTIF[splitBq]])
+                            : cmpColor(idx);
+    const subKind = d.perMotif ? ' · per-motif' : (d.perNicsBq ? ' · per-Bq' : ' · global');
     cards.push({ chartKey, label,
-                 family: d.family + (d.perMotif ? ' · per-motif' : ' · global') + familyExtra,
+                 family: d.family + subKind + familyExtra,
                  img, color });
     idx++;
   }
